@@ -4,7 +4,7 @@ import ParkTable from "../components/ParkTable";
 import '../style/Parks.css';
 
 export default function Parks() {
-  const [disneyParks, setDisneyParks] = useState();
+  const [disneyParks, setDisneyParks] = useState([]);
   
   useEffect(() => {
     const fetchDisneyData = async () => {
@@ -12,7 +12,8 @@ export default function Parks() {
         console.log('called');
         const response = await fetch('http://localhost:5000/api/parks');
         const data = await response.json();
-        setDisneyParks(data);
+        const sortedData = data.sort((a,b) => a.name.localeCompare(b.name));
+        setDisneyParks(sortedData);
       } catch (error) {
         console.error(error);
       }

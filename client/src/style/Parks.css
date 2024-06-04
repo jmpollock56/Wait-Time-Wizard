@@ -10,24 +10,20 @@
 }
 
 table{
-  border: 2px solid #8DB4E4;
+  
   border-collapse: collapse;
-  max-width: 600px;
+  max-width: 500px;
+  table-layout: fixed;
 }
 
 td, th{
   border: 1px solid #8DB4E4;
   padding: 5px;
   cursor: pointer;
-  text-align: center;
 }
 
 .ride-name:hover{
   background-color: #f1f1f1;
-}
-
-.ride-status{
-  font-weight: 700;
 }
 
 tbody > tr:nth-of-type(even) {

@@ -1,0 +1,7 @@
+.plan-container{
+    position: relative;
+    top: 10px;
+}
+
+select{
+    border: 0px 0px 1px 0px black solid;

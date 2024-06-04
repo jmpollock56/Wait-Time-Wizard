@@ -1,3 +1,5 @@
+import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Header(){
     return(
@@ -5,10 +7,18 @@ export default function Header(){
             <nav>   
 
                 <div className="main-nav">
-                    <a href="#" className="home-tab">Home</a>
-                    <a href="#" className="parks-tab">Parks</a>
-                    <a href="#" className="plan-tab">Plan Your Trip</a>
-                    <a href="#" className="collection-tab">Collection</a>
+                    <a href="#" className="home-tab">
+                        <Link to="/home" className="link">Home</Link>
+                    </a>
+                    <a href="#" className="parks-tab">
+                        <Link to="/parks" className="link">Parks</Link>
+                    </a>
+                    <a href="#" className="plan-tab">
+                        <Link to="/plan-your-trip" className="link">Plan Your Trip</Link>
+                    </a>
+                    <a href="#" className="collection-tab">
+                        <Link to="/collection" className="link">Collection</Link>
+                    </a>
                 </div>
 
                 <div className="profile-nav">
