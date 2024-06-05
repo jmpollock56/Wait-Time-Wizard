@@ -1,6 +1,6 @@
 import express from 'express';
 import cors from 'cors';
-import { parkIds } from './parkIds.js';
+import { disneyResorts } from './parkIds.js';
 
 const port = 5000;
 const app = express();
@@ -23,11 +23,31 @@ async function getDisneyData() {
     return parkData;
 }
 
+async function otherDisneyData(){
+    try{
+        const response = await fetch('https://queue-times.com/parks.json');
+
+        if(response.ok){
+            const allData = await response.json();
+            const [ disneyData ] = await allData.filter((data) => data.id === 2);
+            const disneyParks = disneyData.parks;
+            return disneyParks;
+        }
+        
+    } catch (error){
+        console.error(error);
+    }
+}
+
 
 app.get('/api/parks', async (req, res) => {
-    console.log('/api/parks called');
-    const disney = await getDisneyData();
+    
+    const disney = await otherDisneyData();
     res.send(disney);
+});
+
+app.get('/api/parks/plan', async (req, res) =>{
+    res.send(disneyResorts);
 });
 
 app.get('/api/rides/:parkId', async (req, res) => {
