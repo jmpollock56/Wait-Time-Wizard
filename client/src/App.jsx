@@ -19,7 +19,6 @@ function App() {
         <Route path="/home" element={<Home />} />
         <Route path="/landing" element={<Landing />} />
         <Route path="/collection" element={<Collection />} />
-        <Route path="/plan-your-trip" element={<Plan />} />
       </Routes>
     </MantineProvider>
 

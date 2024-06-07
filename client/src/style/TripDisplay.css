@@ -1,0 +1,12 @@
+.trip-container{
+  width: 100%;
+  background-color: bisque;
+  box-sizing: border-box;
+  padding: 5px;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.resort-name{
+  font-size: 15px;
+}

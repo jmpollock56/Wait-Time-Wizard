@@ -9,11 +9,13 @@ export default function Parks() {
   useEffect(() => {
     const fetchDisneyData = async () => {
       try {
-        console.log('called');
+       
         const response = await fetch('http://localhost:5000/api/parks');
         const data = await response.json();
-        const sortedData = data.sort((a,b) => a.name.localeCompare(b.name));
-        setDisneyParks(sortedData);
+        const sortedParks = data.sort((a,b) => a.name.localeCompare(b.name));
+        console.log(sortedParks);
+        setDisneyParks(sortedParks);
+        
       } catch (error) {
         console.error(error);
       }
@@ -21,7 +23,7 @@ export default function Parks() {
     fetchDisneyData();
   }, []);
 
-console.log(disneyParks);
+
   return (
     <>
       <Header />

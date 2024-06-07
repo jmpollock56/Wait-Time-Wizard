@@ -23,30 +23,78 @@ async function getDisneyData() {
     return parkData;
 }
 
-async function otherDisneyData(){
-    try{
+async function addDisneyData(id) {
+    try {
+        const response = await fetch(`https://queue-times.com/parks/${id}/queue_times.json`);
+
+        if (response.ok) {
+            const rideData = await response.json();
+            return rideData;
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function otherDisneyData() {
+    try {
         const response = await fetch('https://queue-times.com/parks.json');
 
-        if(response.ok){
+        if (response.ok) {
             const allData = await response.json();
-            const [ disneyData ] = await allData.filter((data) => data.id === 2);
+            const [disneyData] = await allData.filter((data) => data.id === 2);
             const disneyParks = disneyData.parks;
-            return disneyParks;
+
+            const parkDataPromises = disneyParks.map(async (park) => {
+                return await addDisneyData(park.id);
+            })
+            const fullParkData = await Promise.all(parkDataPromises);
+            return fullParkData;
         }
-        
-    } catch (error){
+
+    } catch (error) {
         console.error(error);
     }
 }
 
 
+async function testParkData(id) {
+    try {
+        const response = await fetch(`https://api.themeparks.wiki/v1/entity/${id}/live`);
+        const data = await response.json();
+        const liveData = data.liveData;
+        const filteredLiveData = liveData.filter((data) => data.entityType === "ATTRACTION");
+        return filteredLiveData;
+    } catch (error) {
+        console.error(error);
+    }
+}
+
+async function parseTest() {
+    let full = [];
+    const parks = disneyResorts[0].parks;
+
+    const promises = parks.map( async (park) => {
+        const livePark = await testParkData(park.id);
+
+        park.liveRides = livePark;
+        full.push(park);
+        
+    });
+
+    await Promise.all(promises);
+    return full;
+}
+
+parseTest();
+
 app.get('/api/parks', async (req, res) => {
-    
-    const disney = await otherDisneyData();
+
+    const disney = await parseTest();
     res.send(disney);
 });
 
-app.get('/api/parks/plan', async (req, res) =>{
+app.get('/api/parks/plan', async (req, res) => {
     res.send(disneyResorts);
 });
 

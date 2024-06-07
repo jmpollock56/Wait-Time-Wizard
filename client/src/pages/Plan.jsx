@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import Header from "../components/Header";
 import { DatePickerInput } from '@mantine/dates';
 import { Select } from '@mantine/core';
+import { Button } from '@mantine/core';
 import '@mantine/dates/styles.css';
 import '../style/Plan.css';
 
-export default function Plan() {
+export default function Plan({ setPlannedTrips, plannedTrips, close }) {
     const [resorts, setResorts] = useState([]);
     const [selectedResort, setSelectedResort] = useState("");
     const [selectedParks, setSelectedParks] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
     const [differenceInDays, setDifferenceInDays] = useState(0);
-
+    const [tripDays, setTripDays] = useState(Array(differenceInDays).fill(''));
+    const [createdTrip, setCreatedTrip] = useState({});
 
     useEffect(() => {
         const fetchDisneyData = async () => {
@@ -30,10 +31,11 @@ export default function Plan() {
 
     useEffect(() => {
         const getParks = () => {
-            const [selectedResortObject] = resorts.filter((resort) => selectedResort === resort.resortName);
+            const [selectedResortObject] = resorts.filter((resort) => selectedResort === resort.name);
             if (selectedResortObject) {
+
                 const availableParks = selectedResortObject.parks;
-                availableParks.push({ id: 0, parkName: "Rest Day" });
+                availableParks.push({ id: 0, name: "Off Day" });
                 setSelectedParks(availableParks);
             } else {
                 setSelectedParks(null);
@@ -55,51 +57,82 @@ export default function Plan() {
                 let diffTime = selectedDates[1] - selectedDates[0];
                 let diffDays = Math.round(diffTime / (1000 * 3600 * 24));
                 setDifferenceInDays(diffDays + 1);
+
             }
         }
         checkIfDatesAreBeforeCurrent();
     }, [selectedDates]);
 
+    function handleSelectChange(value, index){
+        const newTripDays = [...tripDays];
+        newTripDays[index] = value;
+        setTripDays(newTripDays);
+        console.log(newTripDays);
+    }
+
+    function createTrip(){
+        const newVacation = {
+            resort: selectedResort,
+            dates: selectedDates,
+            tripDays: tripDays
+        }
+
+        setPlannedTrips(prevTrips => [...prevTrips, newVacation]);
+        console.log(newVacation);
+        close();
+    }
+
+
     return (
         <>
-            <Header />
             <div className="plan-container">
-                <div className="top-form">
-                    <Select
-                        required
-                        label="Park"
-                        placeholder="Pick a Location"
-                        data={
-                            resorts.map((resort, i) => {
-                                return resort.resortName;
-                            })
-                        }
-                        value={selectedResort}
-                        onChange={setSelectedResort}
-                    />
-
-                    <DatePickerInput
-                        required
-                        type="range"
-                        label="Trip Date"
-                        placeholder="Pick Trip Dates"
-                        value={selectedDates}
-                        onChange={setSelectedDates}
-                    />
-                </div>
-
-                <div className="park-picker">
-                    {[...Array(differenceInDays)].map((_, i) => (
+                <div className="plan-form">
+                    <div className="top-form">
                         <Select
-                            key={i}
-                            label={`Day ${i + 1}`}
-                            className="park-select"
-                            data={selectedParks.map((park, i) => {
-                                return { value: park.id.toString(), label: park.parkName };
-                            })} />
-                    ))}
+                            required
+                            label="Resort"
+                            placeholder="Pick a Location"
+                            data={
+                                resorts.map((resort, i) => {
+                                    return resort.name;
+                                })
+                            }
+                            value={selectedResort}
+                            onChange={setSelectedResort}
+                        />
+
+                        <DatePickerInput
+                            required
+                            type="range"
+                            label="Trip Date"
+                            placeholder="Pick Trip Dates"
+                            value={selectedDates}
+                            onChange={setSelectedDates}
+                        />
+                    </div>
+
+                    <div className="park-picker">
+                        {[...Array(differenceInDays)].map((_, i) => (
+                            <Select
+                                key={i}
+                                label={`Day ${i + 1}`}
+                                className="park-select"
+                                data={selectedParks.map((park) => park.name)}
+                                onChange={(value) => handleSelectChange(value, i)}
+                            />
+                        ))}
+                    </div>
+
+                    <div className="button-container">
+                        <Button
+                            variant="gradient"
+                            gradient={{ from: '#8DB4E4', to: 'blue', deg: 5 }}
+                            onClick={createTrip}>
+                                Create Trip
+                        </Button>
+                        <Button variant="outline" color="#8DB4E4">Reset</Button>
+                    </div>
                 </div>
-                <hr />
             </div>
         </>
     );

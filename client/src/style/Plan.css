@@ -1,16 +1,6 @@
-.plan-container{
-    position: relative;
-    top: 10px;
-    left: 10px;
-}
-
-.top-form{
-    width: 20%;
+.button-container{
     display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.park-select{
-    width: 20%;
+    flex-direction: row;
+    margin-top: 10px;
+    gap: 20px;
 }

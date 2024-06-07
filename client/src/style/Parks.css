@@ -7,12 +7,14 @@
   justify-content: space-evenly;
   top: 10px;
   margin: 0;
+  padding: 10px;
 }
 
 table{
-  
   border-collapse: collapse;
   max-width: 500px;
+  min-width: 500px;
+  max-height: 600px;
   table-layout: fixed;
 }
 
@@ -36,4 +38,9 @@ th{
 
 th:hover{
   background-color: #f1f1f1;
+}
+
+.ride-status{
+  text-align: center;
+  font-weight: 700;
 }
