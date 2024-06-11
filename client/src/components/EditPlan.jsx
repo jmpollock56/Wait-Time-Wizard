@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useState , useEffect} from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import { Select } from '@mantine/core';
 import { Button } from '@mantine/core';
 import '@mantine/dates/styles.css';
 import '../style/Plan.css';
 
-export default function Plan({ setPlannedTrips, plannedTrips, close }) {
+
+export default function EditPlan({ trip }){
+
     const [resorts, setResorts] = useState([]);
+    const [selectedTrip, setSelectedTrip] = useState(trip);
     const [selectedResort, setSelectedResort] = useState("");
     const [selectedParks, setSelectedParks] = useState(null);
     const [selectedDates, setSelectedDates] = useState([]);
@@ -85,6 +88,7 @@ export default function Plan({ setPlannedTrips, plannedTrips, close }) {
         close();
     }
 
+    console.log(selectedTrip);
 
     return (
         <>
@@ -102,9 +106,10 @@ export default function Plan({ setPlannedTrips, plannedTrips, close }) {
                             }
                             value={selectedResort}
                             onChange={setSelectedResort}
+                            defaultValue={`${selectedTrip.resort}`}
                         />
 
-                        <DatePickerInput
+                        <DatePickerInput    
                             required
                             type="range"
                             label="Trip Date"

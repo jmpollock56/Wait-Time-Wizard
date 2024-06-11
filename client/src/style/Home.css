@@ -19,7 +19,7 @@
   display: flex;
   flex-direction: column;
   gap: 100px;
-  height: 100vh;
+  height: 100%;
 }
 
 .current-trips-header{
@@ -52,4 +52,9 @@ hr{
   display: flex;
   flex-direction: column;
   gap: 10px;
+}
+
+.recent-favorites{
+  width: 80%;
+
 }

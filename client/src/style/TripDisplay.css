@@ -1,12 +1,74 @@
+.all-trip{
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 80px;
+  transition: transform 0.5s ease, opacity 0.5s ease;
+}
+
+.all-trip.slide-out {
+  transform: translateX(-100vw);
+  opacity: 0;
+}
+
 .trip-container{
   width: 100%;
-  background-color: bisque;
+  height: 100%;
   box-sizing: border-box;
-  padding: 5px;
+  padding: 10px;
   border-radius: 10px;
   cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1c40f;
 }
 
 .resort-name{
-  font-size: 15px;
+  font-size: 25px;
 }
+
+.days-away{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.number-of-days{
+  font-weight: 700;
+}
+
+.trip-edit-options{
+  width: 10%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-icon{
+  width: 20px;
+  height: 20px;
+}
+
+.delete-btn{
+  background-color: transparent;
+  width: 50px;
+  height: 50%;
+  border-radius: 5px;
+  cursor: pointer;
+  border: 1px solid #8DB4E4;
+}
+
+.edit-btn{
+  background-color: #8DB4E4;
+  border: 1px solid white;
+  width: 50px;
+  height: 100%;
+  border-radius: 5px;
+  cursor: pointer;
+}
+

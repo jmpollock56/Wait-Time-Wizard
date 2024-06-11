@@ -78,6 +78,7 @@ async function parseTest() {
         const livePark = await testParkData(park.id);
 
         park.liveRides = livePark;
+        console.log(park);
         full.push(park);
         
     });
