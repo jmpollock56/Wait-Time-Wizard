@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { Table } from '@mantine/core';
+
 
 export default function ParkTable({ park }) {
   const [rides, setRides] = useState(park.liveRides);
@@ -7,54 +9,68 @@ export default function ParkTable({ park }) {
 
 
   useEffect(() => {
-    const getParkRides = async () => {
-      let allRides = [];
+    const liveRides = park.liveRides;
 
-      const lands = park.lands;
+    try {
+      const abcRides = liveRides.sort((a, b) => {
+        const waitTimeA = a.queue?.STANDBY?.waitTime;
+        const waitTimeB = b.queue?.STANDBY?.waitTime;
 
-      for (let i = 0; i < lands.length; i++) {
-        for (let j = 0; j < lands[i].rides.length; j++) {
-          allRides.push(lands[i].rides[j]);
+
+        if (waitTimeA !== undefined && waitTimeB !== undefined) {
+          console.log('1');
+          return a.queue.STANDBY.waitTime - b.queue.STANDBY.waitTime;
         }
-      }
 
+        if ((waitTimeA === undefined && waitTimeB !== undefined)) {
+          return 1;
+        }
+
+        if (waitTimeA !== undefined && waitTimeB === undefined) {
+          return -1;
+        }
+
+        return 0;
+
+      })
+    } catch (error) {
+      console.error(error);
     }
-    getParkRides();
-  }, []);
 
-
+  }, [])
 
   function getRideStatus(ride) {
     try {
-      if (!("queue" in ride)) {
-        return;
+      // Right now this returns REFURB rides
+      if ((!("queue" in ride)) || ride.status === "REFURBISHMENT") {
+        return {
+          status: ride.status,
+          color: "orange"
+        }
       } else {
         try {
+          // Guardians and TRON
           if (ride.id === "5a43d1a7-ad53-4d25-abfe-25625f0da304" || ride.id === "e3549451-b284-453d-9c31-e3b1207abd79") {
-
             return {
-              status: `${ride.queue.BOARDING_GROUP.currentGroupStart} - ${ride.queue.BOARDING_GROUP.currentGroupEnd}`,
-              color: 'blue'
+              status: (ride.queue.BOARDING_GROUP.currentGroupStart) ? `${ride.queue.BOARDING_GROUP.currentGroupStart} - ${ride.queue.BOARDING_GROUP.currentGroupEnd}` : "DOWN",
+              color: (ride.queue.BOARDING_GROUP.currentGroupStart) ? 'blue' : 'red'
             };
-          } else if (ride.status === "CLOSED" || ride.status === "DOWN" || ride.status === "REFURBISHMENT") {
-            console.log(ride.status);
+            // For rides that are closed and down
+          } else if (ride.status === "CLOSED" || ride.status === "DOWN") {
             return {
               status: ride.status,
-              color: (ride.status === "REFURBISHMENT") ? "orange" : "red"
+              color: "red"
             };
+            // Everything else
           } else {
-
             return {
-              status: `${ride.queue.STANDBY.waitTime} mins` || ride.status,
+              status: (ride.queue.STANDBY.waitTime) ? `${ride.queue.STANDBY.waitTime} mins` : 'OPEN',
               color: "green"
             };
           }
         } catch (error) {
           console.log(ride, error);
         }
-
-
-
       }
     } catch (error) {
       console.error(ride, error);
@@ -64,24 +80,31 @@ export default function ParkTable({ park }) {
   }
 
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>{name}</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        {rides.map((ride, i) => {
-          const { status, color } = getRideStatus(ride);
-          return (
-            <tr key={i}>
-              <td className="ride-name">{ride.name}</td>
-              <td style={{ color: color }} className="ride-status">{status}</td>
-            </tr>
-          )
-        })}
-      </tbody>
-    </table>
+    <div className="table-container">
+      <Table stickyHeader highlightOnHover withTableBorder highlightOnHoverColor="#a2cdff9a" className="park-table">
+        <Table.Thead>
+          <Table.Tr>
+            <Table.Th>{name}</Table.Th>
+            <Table.Th></Table.Th>
+          </Table.Tr>
+        </Table.Thead>
+        <Table.Tbody>
+          {rides.map((ride, i) => {
+            try {
+              const { status, color } = getRideStatus(ride);
+              return (
+                <Table.Tr key={i}>
+                  <Table.Td className="ride-name">{ride.name}</Table.Td>
+                  <Table.Td style={{ color: color }} className="ride-status">{status}</Table.Td>
+                </Table.Tr>
+              )
+            } catch (error) {
+              console.error(ride, error);
+            }
+          })}
+        </Table.Tbody>
+      </Table>
+    </div>
+
   );
 }

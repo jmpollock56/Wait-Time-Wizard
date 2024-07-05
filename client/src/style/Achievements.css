@@ -1,0 +1,37 @@
+.main-collection{
+  padding: 10px;
+}
+
+.all-achievements{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 15px;
+  justify-content: center;
+}
+
+.panel{
+  height: 60px;
+  width: 300px;
+  background-color: gold;
+  background-image: url('');
+  border-radius: 10px;
+  border: black 1px solid;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.panel:hover{
+  background-color: rgb(216, 184, 0);
+}
+
+.a-icon{
+  height: 40px;
+  width: 40px;
+}

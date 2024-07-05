@@ -1,4 +1,4 @@
-import React, { useState , useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import { DatePickerInput } from '@mantine/dates';
 import { Select } from '@mantine/core';
 import { Button } from '@mantine/core';
@@ -6,53 +6,64 @@ import '@mantine/dates/styles.css';
 import '../style/Plan.css';
 
 
-export default function EditPlan({ trip }){
+export default function EditPlan({ tripData, setPlannedTrips, close }) {
 
     const [resorts, setResorts] = useState([]);
-    const [selectedTrip, setSelectedTrip] = useState(trip);
-    const [selectedResort, setSelectedResort] = useState("");
-    const [selectedParks, setSelectedParks] = useState(null);
-    const [selectedDates, setSelectedDates] = useState([]);
-    const [differenceInDays, setDifferenceInDays] = useState(0);
-    const [tripDays, setTripDays] = useState(Array(differenceInDays).fill(''));
+    const [selectedTrip, setSelectedTrip] = useState(tripData);
+    const [selectedResort, setSelectedResort] = useState(tripData.resort);
+    const [selectedParks, setSelectedParks] = useState([]);
+    const [selectedDates, setSelectedDates] = useState(tripData.dates); // array with start and end dates
+    const [differenceInDays, setDifferenceInDays] = useState(0); // how many days the trip is
+    const [tripDays, setTripDays] = useState(tripData.tripDays); // holds the name of the parks for each day in an array
+
 
     useEffect(() => {
         const fetchDisneyData = async () => {
+
             try {
+
                 const response = await fetch('http://localhost:5000/api/parks/plan');
+
                 if (response.ok) {
                     const data = await response.json();
                     setResorts(data);
+                } else {
+                    console.log('miss');
                 }
             } catch (error) {
-                console.error(error);
+                console.error('fetchDisneyData error', error);
             }
         }
         fetchDisneyData();
     }, []);
 
-    useEffect(() => {
+    useEffect(() => { // Data for loading Select with Park options for each day
         const getParks = () => {
-            const [selectedResortObject] = resorts.filter((resort) => selectedResort === resort.name);
-            if (selectedResortObject) {
 
+            const [selectedResortObject] = resorts.filter((resort) => selectedResort === resort.name);
+
+            if (selectedResortObject) {
+                console.log('selectParks run');
                 const availableParks = selectedResortObject.parks;
                 availableParks.push({ id: 0, name: "Off Day" });
                 setSelectedParks(availableParks);
+                setSelectedDates(tripData.dates);
             } else {
+                console.log('null parks');
                 setSelectedParks(null);
             }
         }
         getParks();
-    }, [selectedResort]);
+    }, [selectedResort, resorts]);
 
     useEffect(() => {
         const checkIfDatesAreBeforeCurrent = () => {
+
             let now = new Date();
 
             if (selectedDates[0] < now) {
                 alert('Choose a date in the future');
-                setSelectedDates([]);
+
             }
 
             if (selectedDates[0] && selectedDates[1]) {
@@ -65,30 +76,30 @@ export default function EditPlan({ trip }){
         checkIfDatesAreBeforeCurrent();
     }, [selectedDates]);
 
-    function handleSelectChange(value, index){
+    function handleSelectChange(value, index) {
         const newTripDays = [...tripDays];
         newTripDays[index] = value;
         setTripDays(newTripDays);
-        console.log(newTripDays);
     }
 
-    function createTrip(){
-        // Trip Id generated
+    function editOldTrip() {
         const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
+        
 
-        const newVacation = {
+        const editedVacation = {
             id: randomId,
             resort: selectedResort,
             dates: selectedDates,
             tripDays: tripDays
         }
-
-        setPlannedTrips(prevTrips => [...prevTrips, newVacation]);
-        console.log(newVacation);
+        
+        setPlannedTrips(prevTrips => {
+            let updatedTrips = [...prevTrips, editedVacation];
+            updatedTrips = updatedTrips.filter(trip => trip.id !== selectedTrip.id);
+            return updatedTrips;
+        });
         close();
     }
-
-    console.log(selectedTrip);
 
     return (
         <>
@@ -101,15 +112,15 @@ export default function EditPlan({ trip }){
                             placeholder="Pick a Location"
                             data={
                                 resorts.map((resort, i) => {
-                                    return resort.name;
+                                    return { value: resort.name, label: resort.name };
                                 })
                             }
                             value={selectedResort}
                             onChange={setSelectedResort}
-                            defaultValue={`${selectedTrip.resort}`}
+                            defaultValue={selectedTrip.resort}
                         />
 
-                        <DatePickerInput    
+                        <DatePickerInput
                             required
                             type="range"
                             label="Trip Date"
@@ -120,25 +131,27 @@ export default function EditPlan({ trip }){
                     </div>
 
                     <div className="park-picker">
-                        {[...Array(differenceInDays)].map((_, i) => (
+                        {(selectedParks && differenceInDays) && [...Array(differenceInDays)].map((_, i) => (
                             <Select
                                 key={i}
                                 label={`Day ${i + 1}`}
                                 className="park-select"
+                                value={tripDays[i]}
                                 data={selectedParks.map((park) => park.name)}
                                 onChange={(value) => handleSelectChange(value, i)}
                             />
                         ))}
                     </div>
 
+
                     <div className="button-container">
                         <Button
                             variant="gradient"
                             gradient={{ from: '#8DB4E4', to: 'blue', deg: 5 }}
-                            onClick={createTrip}>
-                                Create Trip
+                            onClick={editOldTrip}>
+                            Edit Trip
                         </Button>
-                        <Button variant="outline" color="#8DB4E4">Reset</Button>
+                        
                     </div>
                 </div>
             </div>

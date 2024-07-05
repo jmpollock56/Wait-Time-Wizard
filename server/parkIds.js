@@ -73,8 +73,7 @@ export const disneyResorts = [
       {
         id: "832fcd51-ea19-4e77-85c7-75d5843b127c",
         name: 'California Adventure',
-        rides: ["7561bcd8-18ea-4e3f-89d5-c905b7ba3d42", "2108cc58-80df-4fff-9b91-735e89873ffd",
-        "7561bcd8-18ea-4e3f-89d5-c905b7ba3d42", "10a5fc6f-5ad3-414b-9bdd-e6bae097b6ad",
+        rides: ["2108cc58-80df-4fff-9b91-735e89873ffd","10a5fc6f-5ad3-414b-9bdd-e6bae097b6ad",
         "b7678dab-5544-48d5-8fdc-c1a0127cfbcd", "e1fbc7a1-2cd1-4282-b373-ac11d9d9d38a",
         "8f586a2f-cef5-46d3-b822-fd622c4e9e33", "44c1f655-25d3-440c-b1a8-db736a12b105",
         "388ad3f1-5cf5-4a9d-8d0e-6dfb817d7822", "40524fba-5d84-49e7-9204-f493dbe2d5a4",
@@ -91,7 +90,27 @@ export const disneyResorts = [
     parks: [
       {
         id: "3cc919f1-d16d-43e0-8c3f-1dd269bd1a42",
-        name: 'Tokyo Disneyland'
+        name: 'Tokyo Disneyland',
+        rides: [
+          "55458c39-ee47-4b8d-ab07-991d12a0313d", "5f0425c4-7d35-4afd-bb28-6c73f1920b1f",
+           "f9321bc7-aa96-4a70-b963-681482384d1b", "077c390c-c214-40c4-83e9-93d8f8621141",
+           "cf1e721e-ba51-4e48-a2bc-b07883091e88", "e3577b4a-f1d9-4ec5-aacf-b99977ea88c9",
+           "e541ad8f-1457-469a-8f35-457555f475ad", "05c7400b-866d-4d47-9cb1-8722fe6b22da",
+           "02a96ff7-da13-48b5-b1a8-f29d9f6109fc", "4f0b3416-0b0a-419b-ba8c-6ee00b7d7144",
+           "4876ec54-92ed-4b0c-8b1b-292bba89c61c", "dfe25d8e-e234-4020-a261-30c6825d0680",
+           "0de1b543-46fd-4c3f-81c8-31d0cab9ef63", "534ca90a-2626-4a45-9b7b-1964ed15678e",
+           "2d215a6d-77a2-4c44-a2e3-c293c1289876", "1fb05b7d-953a-4fa7-b7ed-db2eb62b85bf",
+           "512fd34c-2f0a-4e0a-bcc1-ef4d15c5f803", "cfaa7d1c-111e-49b9-b21b-134eac4000e8",
+           "52eb0fc9-5853-49c8-8c72-1e5e83aae1c1", "e0887415-3da2-458c-8b88-0691e6b8ab63",
+           "8567076f-c996-45ac-84d2-2e68e514806d", "f82709b6-51a3-4b65-8d6f-c2472f5053df",
+           "52c5e406-67e2-4d37-aee8-987644d87b63", "73384e33-a86a-4601-996f-61dbffba6ec2",
+           "6922377e-0ff4-481f-9da3-35051938732a", "a0a63e1c-3fc6-4433-b9b1-f5e798ab1f00",
+           "78510449-ec64-47d3-a140-7b473dbaddf2", "ca00a0e8-f069-4d0a-9d5e-10cb63010956",
+           "8fce6b54-e3e4-40bb-a574-93c8327c3fab", "83f11a48-0d22-4429-8e59-43fd611d6795",
+           "4ed6a812-df04-4aa8-acb9-c6b164dbb706", "3cdacebb-39c9-4b71-8223-c814b3775c18",
+           "3cdacebb-39c9-4b71-8223-c814b3775c18", "e76670f0-9f5f-4918-8491-9bf51e73a596",
+           "6ee0697f-57ba-4c7b-8216-7c55b21288d4", "a853aadd-2337-435a-b0a3-2c03db96e5e1"
+        ]
       },
       {
         id: "67b290d5-3478-4f23-b601-2f8fb71ba803",

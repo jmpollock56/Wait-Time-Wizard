@@ -1,46 +1,61 @@
 .parks-container{
   position: relative;
   display: grid;
-  grid-template-columns: auto auto auto;
+  grid-template-columns: auto auto;
   row-gap: 20px;
   column-gap: 10px;
   justify-content: space-evenly;
   top: 10px;
   margin: 0;
-  padding: 10px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-table{
-  border-collapse: collapse;
-  max-width: 500px;
-  min-width: 500px;
-  max-height: 600px;
-  table-layout: fixed;
+.table-container{
+  position: relative;
+  height: 400px;
+  min-height: 400px;
+  max-height: 400px;
+  overflow-y: auto;
+  width: 800px;
+  min-width: 200px;
+  scrollbar-width: thin;
+  border: 1px #8db4e4c0 solid;
+  border-radius: 5px;
+  padding: 0;
+  margin: 0;
 }
 
-td, th{
-  border: 1px solid #8DB4E4;
-  padding: 5px;
+
+
+.ride-status{
+  font-weight: 600;
+  text-align: end;
+}
+
+tr > th{
+  background-color: #a2cdff6e;
+}
+
+td{
   cursor: pointer;
 }
 
-.ride-name:hover{
-  background-color: #f1f1f1;
+table{
+  height: 400px;
+  min-height: none;
+  width: 400px;
 }
 
-tbody > tr:nth-of-type(even) {
-  background-color: #8db4e469;
+.notice{
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
-th{
-  height: 50px;
+.notice > p{
+  font-size: 10px;
 }
 
-th:hover{
-  background-color: #f1f1f1;
-}
 
-.ride-status{
-  text-align: center;
-  font-weight: 700;
-}
+

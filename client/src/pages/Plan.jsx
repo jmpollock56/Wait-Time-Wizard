@@ -16,8 +16,10 @@ export default function Plan({ setPlannedTrips, plannedTrips, close }) {
     useEffect(() => {
         const fetchDisneyData = async () => {
             try {
+                console.log('1');
                 const response = await fetch('http://localhost:5000/api/parks/plan');
                 if (response.ok) {
+                    console.log('response is ok');
                     const data = await response.json();
                     setResorts(data);
                 }
@@ -30,6 +32,7 @@ export default function Plan({ setPlannedTrips, plannedTrips, close }) {
 
     useEffect(() => {
         const getParks = () => {
+            console.log('2');
             const [selectedResortObject] = resorts.filter((resort) => selectedResort === resort.name);
             if (selectedResortObject) {
 
@@ -45,6 +48,7 @@ export default function Plan({ setPlannedTrips, plannedTrips, close }) {
 
     useEffect(() => {
         const checkIfDatesAreBeforeCurrent = () => {
+            console.log('3');
             let now = new Date();
 
             if (selectedDates[0] < now) {

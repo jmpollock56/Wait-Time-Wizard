@@ -15,8 +15,8 @@ export default function Home() {
   const [deletingTrip, setDeletingTrip] = useState(null);
   const [editTripData, setEditTripData] = useState(null);
 
-  function editTrip(trip) {
-    setEditTripData(trip);
+  function editTrip(selectedTrip) {
+    setEditTripData(selectedTrip);
     openEdit();
   }
 
@@ -30,7 +30,6 @@ export default function Home() {
     }, 500);
   }
 
- 
 
   return (
     <>
@@ -49,7 +48,10 @@ export default function Home() {
         
         <Modal opened={openedEdit} onClose={closeEdit} title="Edit Your Trip">
           <EditPlan 
-            trip={editTripData}
+            tripData={editTripData}
+            setPlannedTrips={setPlannedTrips}
+            plannedTrips={plannedTrips}
+            close={closeEdit}
           />
         </Modal>
 
@@ -63,7 +65,7 @@ export default function Home() {
                 </ActionIcon>
               </Tooltip>
             </div>
-            <hr />
+            
 
             <div className="planned-trips">
               {plannedTrips.map((trip) => (
@@ -83,21 +85,18 @@ export default function Home() {
             <div className="recent-collections-header">
               <div className="home-title">Recent Collections</div>
             </div>
-            <hr />
           </div>
 
           <div className="recent-favorites">
             <div className="recent-collections-header">
               <div className="home-title">Recent Favorites</div>
             </div>
-            <hr />
           </div>
 
           <div className="recent-favorites">
             <div className="recent-collections-header">
               <div className="home-title">Recent Achievements</div>
             </div>
-            <hr />
           </div>
         </div>
 

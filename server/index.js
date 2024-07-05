@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import { disneyResorts } from './parkIds.js';
+import { achievements } from './achievements.js';
 
 const port = 5000;
 const app = express();
@@ -36,7 +37,7 @@ async function addDisneyData(id) {
     }
 }
 
-async function otherDisneyData() {
+async function otherDisneyData() { // Not being used at the moment
     try {
         const response = await fetch('https://queue-times.com/parks.json');
 
@@ -58,44 +59,56 @@ async function otherDisneyData() {
 }
 
 
-async function testParkData(id) {
+async function testParkData(park) {
+    let wantedRides = park.rides;
+
     try {
-        const response = await fetch(`https://api.themeparks.wiki/v1/entity/${id}/live`);
+        const response = await fetch(`https://api.themeparks.wiki/v1/entity/${park.id}/live`);
         const data = await response.json();
         const liveData = data.liveData;
-        const filteredLiveData = liveData.filter((data) => data.entityType === "ATTRACTION");
-        return filteredLiveData;
+        if(park.rides){
+            const filteredLiveData = liveData.filter((ride) => wantedRides.includes(ride.id));
+            return filteredLiveData;
+        } else {
+            const attractionLiveData = liveData.filter((ride) => ride.entityType === "ATTRACTION");
+            return attractionLiveData;
+        }
+        
     } catch (error) {
         console.error(error);
     }
 }
 
-async function parseTest() {
-    let full = [];
-    const parks = disneyResorts[0].parks;
-
+async function parseTest(resort) {
+    const parks = resort.parks;
+    let newParks = [];
     const promises = parks.map( async (park) => {
-        const livePark = await testParkData(park.id);
-
-        park.liveRides = livePark;
-        console.log(park);
-        full.push(park);
-        
+        const livePark = await testParkData(park);
+        newParks.push({
+            id: park.id,
+            name: park.name,
+            liveRides: livePark
+        });
     });
-
     await Promise.all(promises);
-    return full;
+    return {
+        id: resort.id,
+        name: resort.name,
+        parks: newParks
+    }
+    
 }
 
-parseTest();
-
 app.get('/api/parks', async (req, res) => {
-
-    const disney = await parseTest();
-    res.send(disney);
+    let allResorts = [];
+    for(let i = 0; i < disneyResorts.length; i++){
+        let newResort = await parseTest(disneyResorts[i]);
+        allResorts.push(newResort);
+    } 
+    res.send(allResorts);
 });
 
-app.get('/api/parks/plan', async (req, res) => {
+app.get('/api/parks/plan', (req, res) => {
     res.send(disneyResorts);
 });
 
@@ -104,6 +117,10 @@ app.get('/api/rides/:parkId', async (req, res) => {
 
     const rides = await getRideData(parkId);
     res.send(rides);
+})
+
+app.get('/api/collection/achievements', async (req, res) => {
+    res.send(achievements);
 })
 
 app.listen(port, async () => {
