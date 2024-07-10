@@ -1,12 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
+
 export default function Header() {
   return (
-    <nav className="navbar navbar-expand-md bg-body-tertiary sticky-top">
+    <nav className="navbar navbar-expand-md bg-body-tertiary sticky-top navbar-back">
       <div className="container-fluid">
-        <Link to="/home" className="navbar-brand">
-          Wait Time Wizard
+        <Link to="/home" className="d-flex align-items-center navbar-brand">
+          <img src="/hat.png" alt="logo" width={40} height={40}/>
+          <div><b>Wait Time Wizard</b></div>
         </Link>
 
         <button
@@ -38,7 +40,7 @@ export default function Header() {
               </Link>
             </li>
           </ul>
-          <div className="d-flex align-items-center gap-3">
+          <div className="d-flex align-items-center gap-3" style={{cursor: "pointer"}}>
             <div id="name">Username</div>
             <img
               style={{

@@ -12,15 +12,17 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
 
   useEffect(() => {
     const getDaysAway = () => {
-      let now = new Date();
+      const now = new Date();
+      const startDate = new Date(currentTrip.dates.start)
       now.setHours(0, 0, 0, 0);
-      const milliDiff = currentTrip.dates[0] - now;
-      const differenceInDays = milliDiff / (1000 * 60 * 60 * 24);
+      const milliDiff = startDate - now;
+      const differenceInDays = Math.ceil(milliDiff / (1000 * 60 * 60 * 24));
       setDaysAway(differenceInDays);
     };
     getDaysAway();
   }, [currentTrip]);
 
+  
   const handleSlideOut = () => {
     setIsSlidingOut(true);
     setTimeout(() => {

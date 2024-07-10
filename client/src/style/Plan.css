@@ -4,3 +4,8 @@
     margin-top: 10px;
     gap: 20px;
 }
+
+
+.date-picker{
+    z-index: 400000;
+}

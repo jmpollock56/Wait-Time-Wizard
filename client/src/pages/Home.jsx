@@ -1,16 +1,13 @@
 import React, { useEffect, useState } from "react";
 import Header from "../components/Header";
 import TripDisplay from "../components/TripDisplay.jsx";
-import EditPlan from "../components/EditPlan.jsx";
-import { Button, Modal, ActionIcon, Tooltip } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { IconPlus } from "@tabler/icons-react";
-import Plan from "./Plan.jsx";
+import AddTripModal from "../components/AddTripModal.jsx";
 import "../style/Home.css";
 
+
+
 export default function Home() {
-  const [opened, { open, close }] = useDisclosure(false);
-  const [openedEdit, { open: openEdit, close: closeEdit }] = useDisclosure(false);
+  
   const [plannedTrips, setPlannedTrips] = useState([]);
   const [deletingTrip, setDeletingTrip] = useState(null);
   const [editTripData, setEditTripData] = useState(null);
@@ -30,51 +27,40 @@ export default function Home() {
     }, 500);
   }
 
+  function handleNewPlannedTrips(newTrip){
+    const updatedPlannedTrips = [...plannedTrips, newTrip]
+    setPlannedTrips(updatedPlannedTrips)
+    console.log(updatedPlannedTrips)
+  }
 
   return (
     <>
       <Header />
-      <div className="home-container">
-
-    
-        <Modal opened={opened} onClose={close} title="Create Your Next Trip!">
-          <Plan
-            setPlannedTrips={setPlannedTrips}
-            plannedTrips={plannedTrips}
-            close={close}
-          />
-        </Modal>
-
-        
-        <Modal opened={openedEdit} onClose={closeEdit} title="Edit Your Trip">
-          <EditPlan 
-            tripData={editTripData}
-            setPlannedTrips={setPlannedTrips}
-            plannedTrips={plannedTrips}
-            close={closeEdit}
-          />
-        </Modal>
-
-        <div className="left-container">
+      <div className="d-lg-flex mt-2 p-2">
+        <div className="left-container w-100">
           <div className="recent-favorites">
             <div className="current-trips-header">
               <div className="home-title">Your Trips</div>
-              <Tooltip label="Add a new trip!">
-                <ActionIcon size="20" variant="outline" onClick={open}>
-                  <IconPlus className="add-icon" stroke={1} />
-                </ActionIcon>
-              </Tooltip>
+              <button
+                type="button"
+                className="btn btn-outline-primary btn-sm"
+                style={{'--bs-btn-padding-y': '.1rem', '--bs-btn-padding-x': '.4rem'}}
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModal"
+              >
+                +
+              </button>
             </div>
-            
+
+            <AddTripModal handleNewPlannedTrips={handleNewPlannedTrips}/>
 
             <div className="planned-trips">
-              {plannedTrips.map((trip) => (
+              {plannedTrips.map((trip, i) => (
                 <TripDisplay
-                  key={trip.id}
+                  key={i}
                   trip={trip}
                   deleteTrip={handleDelete}
                   editTrip={editTrip}
-                  openEdit={openEdit}
                   isDeleting={deletingTrip === trip.id}
                 />
               ))}
@@ -100,7 +86,7 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="right-container">
+        <div className="right-container w-100">
           <div className="social-title">Your Social Feed</div>
           <div className="user-feed"></div>
         </div>
