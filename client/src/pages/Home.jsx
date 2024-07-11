@@ -8,7 +8,7 @@ import "../style/Home.css";
 
 export default function Home() {
   
-  const [plannedTrips, setPlannedTrips] = useState([]);
+  const [plannedTrips, setPlannedTrips] = useState([{id: 100, resort: 'Walt Disney World', dates: {start: new Date(), end: new Date()}, tripDays: [0,0,0]}]);
   const [deletingTrip, setDeletingTrip] = useState(null);
   const [editTripData, setEditTripData] = useState(null);
 
@@ -38,7 +38,7 @@ export default function Home() {
       <Header />
       <div className="d-lg-flex mt-2 p-2">
         <div className="left-container w-100">
-          <div className="recent-favorites">
+          <div className="w-100">
             <div className="current-trips-header">
               <div className="home-title">Your Trips</div>
               <button
@@ -54,7 +54,8 @@ export default function Home() {
 
             <AddTripModal handleNewPlannedTrips={handleNewPlannedTrips}/>
 
-            <div className="planned-trips">
+            
+            <div className="w-100 d-flex flex-wrap gap-2 p-2">
               {plannedTrips.map((trip, i) => (
                 <TripDisplay
                   key={i}
@@ -67,21 +68,30 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="recent-favorites">
+          <div className="w-100">
             <div className="recent-collections-header">
               <div className="home-title">Recent Collections</div>
+              <div className="p-3">
+              <p>No recent Collection items to show.</p>
+              </div>
             </div>
           </div>
 
-          <div className="recent-favorites">
+          <div className="w-100">
             <div className="recent-collections-header">
               <div className="home-title">Recent Favorites</div>
+              <div className="p-3">
+              <p>No recent Favorites to show.</p>
+              </div>
             </div>
           </div>
 
-          <div className="recent-favorites">
+          <div className="w-100">
             <div className="recent-collections-header">
               <div className="home-title">Recent Achievements</div>
+              <div className="p-3">
+                <p>No recent Achievements to show.</p>
+              </div>
             </div>
           </div>
         </div>

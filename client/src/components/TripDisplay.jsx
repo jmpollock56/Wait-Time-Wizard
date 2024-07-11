@@ -1,8 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Button, Modal, ActionIcon, Tooltip } from "@mantine/core";
-import { useDisclosure } from "@mantine/hooks";
-import { MdDelete } from "react-icons/md";
-import { MdEdit } from "react-icons/md";
 import "../style/TripDisplay.css";
 
 export default function TripDisplay({ trip, editTrip, deleteTrip }) {
@@ -13,7 +9,7 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
   useEffect(() => {
     const getDaysAway = () => {
       const now = new Date();
-      const startDate = new Date(currentTrip.dates.start)
+      const startDate = new Date(currentTrip.dates.start);
       now.setHours(0, 0, 0, 0);
       const milliDiff = startDate - now;
       const differenceInDays = Math.ceil(milliDiff / (1000 * 60 * 60 * 24));
@@ -22,38 +18,24 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
     getDaysAway();
   }, [currentTrip]);
 
-  
-  const handleSlideOut = () => {
-    setIsSlidingOut(true);
-    setTimeout(() => {
-      deleteTrip(currentTrip);
-    }, 500); // Match the CSS transition duration
-  };
-
   const handleEditTrip = () => {
     editTrip(currentTrip);
   }
 
+  const handleDelete = () => {
+    deleteTrip(currentTrip)
+  }
+
   return (
-      <div className={`all-trip ${isSlidingOut ? "slide-out" : ""}`}>
-        <div className="trip-container">
-          <h1 className="resort-name">{currentTrip.resort}</h1>
-          <div className="days-away">
-            <div className="days-away-title">Days Away</div>
-            <div className="number-of-days">{daysAway}</div>
-          </div>
-        </div>
-
-        <div className="trip-edit-options">
-          <button className="edit-btn" onClick={handleEditTrip}>
-            <MdEdit className="edit-icon" />
-          </button>
-
-          <button className="delete-btn" onClick={handleSlideOut}>
-            <MdDelete className="edit-icon" />
-          </button>
-        </div>
+    <div className="card text-bg-primary shadow" style={{width: '12rem', minWidth: '10rem', cursor: 'pointer'}}>
+      <div className="card-body">
+        <h5 className="card-title">{trip.resort}</h5>
+        <p className="card-text">
+          {`${daysAway} day(s) away`}
+        </p>
+        <button className="btn btn-outline-light me-3">Edit</button>
+        <button className="btn btn-light" onClick={handleDelete}>Cancel</button>
       </div>
-    
+    </div>
   );
 }
