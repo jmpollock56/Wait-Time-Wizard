@@ -77,7 +77,7 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)) + 1;
 
       setDifferenceInDays(diffDays);
-      setParkDays(Array(diffDays).fill(null));
+      setParkDays(Array(diffDays).fill({}));
     }
   }, [startDate, endDate]);
 
@@ -113,16 +113,19 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
     }
   }
 
-  function handleParkDaySelect(value, i){
+  function handleParkDaySelect(e, i){
+    const selectedPark = JSON.parse(e.target.options[e.target.selectedIndex].getAttribute('data-value'));
+    console.log(selectedPark)
+    console.log(e.target.value)
     const newParkDays = [...parkDays]
-    newParkDays[i] = value
+    newParkDays[i] = selectedPark
     setParkDays(newParkDays)
   }
 
   return (
     <div
-      className="modal fade"
-      id="exampleModal"
+      className="modal modal-centered fade"
+      id="addTripModal"
       tabIndex="-1"
       aria-labelledby="exampleModalLabel"
       aria-hidden="true"
@@ -199,12 +202,13 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
                   {Array(differenceInDays).fill(null).map((_, i) => (
                     <div className="d-flex flex-column" key={i}>
                       <span>{`Day ${i + 1}: `}</span>
-                      <select className="form-control" onChange={(e) => {handleParkDaySelect(e.target.value, i)}}>
+                      <select className="form-control" onChange={(e) => {handleParkDaySelect(e, i)}}>
                         <option></option>
                         {selectedParks &&
                           selectedParks.map((park, j) => (
                             <option 
-                              value={park.name} 
+                              data-value={JSON.stringify(park)}
+                              value={park.name}
                               key={j}>
                               {park.name}
                             </option>

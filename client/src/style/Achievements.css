@@ -7,15 +7,14 @@
   flex-direction: row;
   flex-wrap: wrap;
   gap: 15px;
-  justify-content: center;
+  justify-content: space-evenly;
 }
 
 .panel{
-  height: 60px;
-  width: 300px;
-  background-color: gold;
-  background-image: url('');
-  border-radius: 10px;
+  height: 80px;
+  width: 80px;
+  background-color: rgb(27, 151, 253);
+  border-radius: 50%;
   border: black 1px solid;
   display: flex;
   flex-direction: row;
@@ -32,6 +31,7 @@
 }
 
 .a-icon{
-  height: 40px;
-  width: 40px;
+  
+  height: 60px;
+  width: 60px;
 }

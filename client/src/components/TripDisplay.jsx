@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+
 import "../style/TripDisplay.css";
 
 export default function TripDisplay({ trip, editTrip, deleteTrip }) {
@@ -27,15 +28,19 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
   }
 
   return (
-    <div className="card text-bg-primary shadow" style={{width: '12rem', minWidth: '10rem', cursor: 'pointer'}}>
+    <div className="card bg-primary-subtle border-primary shadow" style={{width: '12rem', minWidth: '10rem', cursor: 'pointer'}}>
       <div className="card-body">
         <h5 className="card-title">{trip.resort}</h5>
         <p className="card-text">
           {`${daysAway} day(s) away`}
         </p>
-        <button className="btn btn-outline-light me-3">Edit</button>
+        <button 
+          className="btn btn-primary me-3"
+          data-bs-toggle="modal"
+          data-bs-target="#editTripModal" onClick={handleEditTrip}>Edit</button>
         <button className="btn btn-light" onClick={handleDelete}>Cancel</button>
       </div>
+      
     </div>
   );
 }

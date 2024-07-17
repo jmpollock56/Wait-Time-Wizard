@@ -26,11 +26,11 @@ export default function Parks() {
   return (
     <>
       <Header />
-      <div className="notice">
+      <div className="notice p-3">
         <p>*Wait times may not be accurate due to downtimes and other API issues. If you notice a large number of rides showing 'DOWN,' it either is due to the park being closed or the API having issues retrieving data*</p>
       </div>
       {(disneyResorts) ?
-        <div className="resort-container">
+        <div className="resort-container w-100">
           {disneyResorts.map((resort, i) => {
             return <ResortSection key={i} resort={resort} />
           })}
