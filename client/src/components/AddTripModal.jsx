@@ -14,7 +14,7 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
 
   function createTrip() {
     // Trip Id generated
-    const randomId = Math.floor(Math.random() * 9000000000) + 1000000000;
+    const randomId = Math.floor(Math.random() * 900000) + 1000000;
 
     if(selectedResort && startDate && endDate && parkDays.length === differenceInDays){
       const newTrip = {
@@ -28,8 +28,6 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
       handleNewPlannedTrips(newTrip)
       handleAddTripModalClose()
     }
-
-    
   }
 
   useEffect(() => {
@@ -115,8 +113,6 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
 
   function handleParkDaySelect(e, i){
     const selectedPark = JSON.parse(e.target.options[e.target.selectedIndex].getAttribute('data-value'));
-    console.log(selectedPark)
-    console.log(e.target.value)
     const newParkDays = [...parkDays]
     newParkDays[i] = selectedPark
     setParkDays(newParkDays)

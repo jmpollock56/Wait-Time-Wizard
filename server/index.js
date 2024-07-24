@@ -2,11 +2,13 @@ import express from 'express';
 import cors from 'cors';
 import { disneyResorts } from './parkIds.js';
 import { achievements } from './achievements.js';
+import { getAchievements, verifyUser, getUser, removeTrip, insertTrip } from './database/sql_connection.js';
 
 const port = 5000;
 const app = express();
 
 app.use(cors());
+app.use(express.json())
 
 async function getDisneyData() {
     const parkData = [];
@@ -57,7 +59,6 @@ async function otherDisneyData() { // Not being used at the moment
         console.error(error);
     }
 }
-
 
 async function testParkData(park) {
     let wantedRides = park.rides;
@@ -121,6 +122,43 @@ app.get('/api/rides/:parkId', async (req, res) => {
 
 app.get('/api/collection/achievements', async (req, res) => {
     res.send(achievements);
+})
+
+app.get('/api/users/:userId', async (req, res) => {
+    const { userId } = req.params
+    const currentUser = await getUser(userId)
+    res.send(currentUser)
+})
+
+app.post('/api/login', async (req, res) => {
+    const { email, password } = req.body
+    
+    const isVerified = await verifyUser(email, password) 
+    
+    if(isVerified.isUser){
+        const user = await getUser(isVerified.id)
+      
+        res.status(201).json({message: 'Login success', user: user})
+    } else {
+        res.status(401).json({message: "Invalid email or password"})
+    }
+})
+
+app.delete('/api/trip/delete/:tripId', async (req, res) => {
+    const { tripId } = req.params
+    removeTrip(tripId)
+})
+
+app.post('/api/trips/add', async (req, res) => {
+    const trip = req.body
+    const response = await insertTrip(trip)
+
+    if(response){
+        res.status(200).send({message: 'Trip added'})
+    } else {
+        res.status(400).send({message: 'Trip added FAILED'})
+    }
+    
 })
 
 app.listen(port, async () => {

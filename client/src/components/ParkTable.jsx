@@ -82,16 +82,15 @@ export default function ParkTable({ park }) {
     }
   }
 
-  
   return (
     <div className="table-container shadow">
-      <table
-        className="table table-striped h-100"
-        
-      >
+      <table className="table table-striped h-100">
         <thead className="sticky-top z-1" style={{textAlign: 'center'}}>
           <tr>
-            <th className="bg-primary-subtle" scope="col">{name}</th>
+            <th className="bg-primary-subtle d-flex justify-content-center align-items-center gap-2" scope="col">
+              <input type="checkbox" name="favPark" style={{height: "20px", width: "20px"}}/>
+              <div>{name}</div>
+            </th>
             <th className="bg-primary-subtle" >Status</th>
           </tr>
         </thead>

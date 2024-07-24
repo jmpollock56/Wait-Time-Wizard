@@ -21,6 +21,10 @@ const ResortProvider = ({ children }) => {
     fetchDisneyData();
   }, [])
 
+  const value = {
+    allResorts
+  }
+
 
   return (
     <ResortContext.Provider value={{ allResorts }}>

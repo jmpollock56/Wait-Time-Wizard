@@ -1,60 +1,82 @@
 import React, { useEffect, useState, useContext } from "react";
+import axios from "axios";
 import Header from "../components/Header";
 import TripDisplay from "../components/TripDisplay.jsx";
 import AddTripModal from "../components/AddTripModal.jsx";
 import EditTripModal from "../components/EditTripModal.jsx";
-import RecentAchievementBadge from '../components/RecentAchievementBadge.jsx'
-import { AchievementsContext } from "../context/AchievementContext";
+import RecentAchievementBadge from '../components/RecentAchievementBadge.jsx';
+import { UserContext } from "../context/UserContext.jsx";
 import "../style/Home.css";
 
 export default function Home() {
-  const [plannedTrips, setPlannedTrips] = useState([
-    {
-      id: 100,
-      resort: "Walt Disney World",
-      dates: { start: new Date(), end: new Date() },
-      tripDays: [0, 0, 0],
-    },
-  ]);
-  const [deletingTrip, setDeletingTrip] = useState(null);
-  const [editedTrip, setEditedTrip] = useState(null);
-  const { allAchievements, completedAchievements } =
-    useContext(AchievementsContext);
+  
+  const [deletingTrip, setDeletingTrip] = useState({});
+  const [editedTrip, setEditedTrip] = useState({});
+  const { addTrip, currentUser, userPlannedTrips } = useContext(UserContext);
   const [recentAchievements, setRecentAchievements] = useState([]);
+  
+
+ 
 
   useEffect(() => {
-    function updateRecentAchievements(){
-      const recent = completedAchievements.slice(-5)
-      recent.sort((a,b) => b.date - a.date)
-      console.log(recent)
-      setRecentAchievements(recent)
+    if (currentUser) {
+      function updateRecentAchievements() {
+        const completedAchievements = currentUser.completeAchievements || [];
+        const recent = completedAchievements.slice(-5);
+        recent.sort((a, b) => new Date(b.date) - new Date(a.date));
+        setRecentAchievements(recent);
+      }
+      updateRecentAchievements();
     }
-    updateRecentAchievements()
-  },[])
+  }, [currentUser])
 
   function editTrip(selectedTrip) {
     setEditedTrip(selectedTrip);
-    console.log(editedTrip)
   }
 
   function handleDelete(trip) {
-    setDeletingTrip(trip.id);
-    setTimeout(() => {
-      setPlannedTrips((prevTrips) =>
-        prevTrips.filter((oldTrip) => oldTrip.id !== trip.id)
-      );
-      setDeletingTrip(null);
-    }, 500);
+    axios.delete(`http://localhost:5000/api/trip/delete/${trip.id}`)
+          .then(res => console.log(res))
+  }
+
+  function sortPlannedTrips(updatedPlannedTrips) {
+    const newPlannedTrips = updatedPlannedTrips.sort((a, b) => {
+      const dateA = new Date(a.dates.start);
+      const dateB = new Date(b.dates.start);
+      return dateA - dateB;
+    });
+
+    return newPlannedTrips;
   }
 
   function handleNewPlannedTrips(newTrip) {
-    const updatedPlannedTrips = [...plannedTrips, newTrip];
-    setPlannedTrips(updatedPlannedTrips);
+    addTrip(newTrip);
+    const updatedPlannedTrips = sortPlannedTrips([...userPlannedTrips, newTrip]);
+    setUserPlannedTrips(updatedPlannedTrips);
+  }
+
+  function editExistingTrip(newTrip) {
+    const index = userPlannedTrips.findIndex((plannedTrip) => plannedTrip.id === newTrip.id);
+    
+    if (index !== -1) {
+      const editedPlannedTrips = [...userPlannedTrips];
+      editedPlannedTrips[index] = newTrip;
+      const newEditedPlannedTrips = sortPlannedTrips(editedPlannedTrips);
+      
+    }
+  }
+
+  if (!currentUser) {
+
+    return  <div className="d-flex flex-column justify-content-center align-items-center h-100 gap-4">
+              <div className="spinner-border text-primary" style={{width: '200px', height: '200px'}} role="status">
+                <span className="visually-hidden">Loading...</span>
+              </div>
+              <h4>Loading Good Times</h4>
+            </div>
     
   }
 
-  
-  
   return (
     <>
       <Header />
@@ -66,10 +88,7 @@ export default function Home() {
               <button
                 type="button"
                 className="btn btn-outline-primary btn-sm"
-                style={{
-                  "--bs-btn-padding-y": ".1rem",
-                  "--bs-btn-padding-x": ".4rem",
-                }}
+                style={{ "--bs-btn-padding-y": ".1rem", "--bs-btn-padding-x": ".4rem" }}
                 data-bs-toggle="modal"
                 data-bs-target="#addTripModal"
               >
@@ -77,22 +96,22 @@ export default function Home() {
               </button>
             </div>
 
-            
-
             <AddTripModal handleNewPlannedTrips={handleNewPlannedTrips} />
-            <EditTripModal chosenTrip={editedTrip}/>
 
-            <div className="w-100 d-flex flex-wrap gap-2 p-2">
-              {plannedTrips.map((trip, i) => (
-                <TripDisplay
-                  key={i}
-                  trip={trip}
-                  deleteTrip={handleDelete}
-                  editTrip={editTrip}
-                  isDeleting={deletingTrip === trip.id}
-                />
-              ))}
-            </div>
+            <EditTripModal chosenTrip={editedTrip} editExistingTrip={editExistingTrip} /> 
+
+            {userPlannedTrips.length !== 0 
+              ? <div className="w-100 d-flex flex-wrap gap-2 p-2">
+                  {userPlannedTrips.map((trip, i) => (
+                    <TripDisplay
+                      key={i}
+                      trip={trip}
+                      deleteTrip={handleDelete}
+                      editTrip={editTrip}
+                      isDeleting={deletingTrip === trip.id}
+                    />
+                  ))}
+                </div> : <div className="p-3"><p>No upcoming trips.</p></div>}
           </div>
 
           <div className="w-100">
@@ -116,10 +135,14 @@ export default function Home() {
           <div className="w-100">
             <div className="recent-collections-header">
               <div className="home-title">Recent Achievements</div>
-              <div className="p-2 d-flex gap-2 flex-wrap">
-                {(recentAchievements.length > 0) ? recentAchievements.map((cA, i) => {
-                  return <RecentAchievementBadge key={i} achievement={cA}/>
-                }) : <p>No recent Achievements to show.</p>}
+              <div className="d-flex gap-2 flex-wrap">
+                {recentAchievements.length !== 0 ? (
+                  recentAchievements.map((cA, i) => (
+                    <RecentAchievementBadge key={i} achievement={cA} />
+                  ))
+                ) : (
+                  <div className="p-3"><p>No recent Achievements to show.</p></div>
+                )}
               </div>
             </div>
           </div>

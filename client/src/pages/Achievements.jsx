@@ -1,17 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
-import { AchievementsContext } from "../context/AchievementContext";
+import { UserContext } from "../context/UserContext";
 import Header from "../components/Header";
 import AchievementPanel from "../components/AchievementPanel";
 import "../style/Achievements.css";
 
 export default function Achievements() {
-  const {
-    allAchievements,
-    setAllAchievements,
-    completedAchievements,
-    setCompletedAchievements,
-    addAchievement
-  } = useContext(AchievementsContext)
+  const { currentUser } = useContext(UserContext)
+  const [allAchievements, setAllAchievements] = useState([])
+
   
 
   useEffect(() => {
@@ -29,9 +25,16 @@ export default function Achievements() {
     getAchievements();
   }, []);
 
-  function checkStatus(achievement) {
-    return completedAchievements.some((completed) => completed.id === achievement.id)
+  function addAchievement(){
+    console.log('add')
   }
+
+  // function checkStatus(achievement) {
+  //   if(completedAchievements) {
+  //     return completedAchievements.some((completed) => completed === achievement.id)
+  //   }
+    
+  // }
 
   return (
     <>
@@ -48,7 +51,7 @@ export default function Achievements() {
               <AchievementPanel
                 achievement={achievement}
                 addAchievement={addAchievement}
-                isChecked={checkStatus(achievement)}
+                
                 key={i}
               />
             );
