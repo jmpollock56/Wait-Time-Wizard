@@ -15,9 +15,6 @@ export default function Home() {
   const { addTrip, currentUser, userPlannedTrips } = useContext(UserContext);
   const [recentAchievements, setRecentAchievements] = useState([]);
   
-
- 
-
   useEffect(() => {
     if (currentUser) {
       function updateRecentAchievements() {
@@ -39,31 +36,8 @@ export default function Home() {
           .then(res => console.log(res))
   }
 
-  function sortPlannedTrips(updatedPlannedTrips) {
-    const newPlannedTrips = updatedPlannedTrips.sort((a, b) => {
-      const dateA = new Date(a.dates.start);
-      const dateB = new Date(b.dates.start);
-      return dateA - dateB;
-    });
-
-    return newPlannedTrips;
-  }
-
   function handleNewPlannedTrips(newTrip) {
     addTrip(newTrip);
-    const updatedPlannedTrips = sortPlannedTrips([...userPlannedTrips, newTrip]);
-    setUserPlannedTrips(updatedPlannedTrips);
-  }
-
-  function editExistingTrip(newTrip) {
-    const index = userPlannedTrips.findIndex((plannedTrip) => plannedTrip.id === newTrip.id);
-    
-    if (index !== -1) {
-      const editedPlannedTrips = [...userPlannedTrips];
-      editedPlannedTrips[index] = newTrip;
-      const newEditedPlannedTrips = sortPlannedTrips(editedPlannedTrips);
-      
-    }
   }
 
   if (!currentUser) {
@@ -98,18 +72,20 @@ export default function Home() {
 
             <AddTripModal handleNewPlannedTrips={handleNewPlannedTrips} />
 
-            <EditTripModal chosenTrip={editedTrip} editExistingTrip={editExistingTrip} /> 
+            {(editedTrip !== null) ? <EditTripModal chosenTrip={editedTrip} /> : ""}
+            
 
             {userPlannedTrips.length !== 0 
               ? <div className="w-100 d-flex flex-wrap gap-2 p-2">
                   {userPlannedTrips.map((trip, i) => (
-                    <TripDisplay
-                      key={i}
-                      trip={trip}
-                      deleteTrip={handleDelete}
-                      editTrip={editTrip}
-                      isDeleting={deletingTrip === trip.id}
-                    />
+                    (!trip.start_date < new Date()) ?
+                      <TripDisplay
+                        key={i}
+                        trip={trip}
+                        deleteTrip={handleDelete}
+                        editTrip={editTrip}
+                        isDeleting={deletingTrip === trip.id}
+                      /> : ""
                   ))}
                 </div> : <div className="p-3"><p>No upcoming trips.</p></div>}
           </div>

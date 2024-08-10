@@ -1,95 +1,70 @@
-import React, { createContext, useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { createContext, useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 
-const UserContext = createContext()
-
+const UserContext = createContext();
 
 const UserProvider = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState(null)
-  const [userPlannedTrips, setUserPlannedTrips] = useState([])
-  
+  const [currentUser, setCurrentUser] = useState(null);
+  const [userPlannedTrips, setUserPlannedTrips] = useState([]);
+  const [userAchievements, setUserAchievements] = useState([]);
+  const [allAchievements, setAllAchievements] = useState([]);
 
-  const initUser = (user) => {
-    setCurrentUser(user);
-    localStorage.setItem('currentUserId', JSON.stringify(user.id));
-  }
-
-  const logout = () => {
-    setCurrentUser(null);
-    localStorage.removeItem('currentUserId')
-  }
-
-  const addAchievement = (newAchievement) => {
-    if (currentUser) {
-      const now = new Date();
-      newAchievement.date = now;
-      const updatedCompletedAchievements = [...currentUser.completeAchievements, newAchievement];
-      const updatedUser = { ...currentUser, completeAchievements: updatedCompletedAchievements };
-      setCurrentUser(updatedUser);
-      
+  const fetchAchievements = useCallback(async (userId) => {
+    try {
+      const [allAchievementsRes, userAchievementsRes] = await Promise.all([
+        axios.get('http://localhost:5000/api/collection/achievements'),
+        axios.get(`http://localhost:5000/api/user/achievements/${userId}`)
+      ]);
+      setAllAchievements(allAchievementsRes.data);
+      setUserAchievements(userAchievementsRes.data);
+    } catch (error) {
+      console.error('Error fetching achievements:', error);
     }
-  }
+  }, []);
 
-  const addTrip = async (newTrip) => {
-    console.log(newTrip)
-    const trip = {
-      trip_id: newTrip.id,
-      resort: newTrip.resort,
-      start_date: newTrip.dates.start,
-      end_date: newTrip.dates.end,
-      tripDays: newTrip.tripDays,
-      user_id: currentUser.id
+  const fetchPlannedTrips = useCallback(async (userId) => {
+    try {
+      const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
+      const sortedTrips = sortPlannedTrips(response.data.trips);
+      setUserPlannedTrips(sortedTrips);
+    } catch (error) {
+      console.error('Error fetching planned trips:', error);
     }
+  }, []);
 
-    try{
-      const response = await axios.post('http://localhost:5000/api/trips/add', trip)
-      let newUser = currentUser
-      newUser.trips.push(trip)
-      setCurrentUser(newUser)
-    } catch (err) {
-      console.log('error', err)
-    }
-    
-  }
-
-  function sortPlannedTrips(updatedPlannedTrips) {
-    const newPlannedTrips = updatedPlannedTrips.sort((a, b) => {
-      const dateA = new Date(a.start_date);
-      const dateB = new Date(b.start_date);
-      return dateA - dateB;
-    });
-
-    return newPlannedTrips;
+  function sortPlannedTrips(trips) {
+    return trips.sort((a, b) => new Date(a.start_date) - new Date(b.start_date));
   }
 
   useEffect(() => {
-    const id = localStorage.getItem('currentUserId');
-    if (id) {
-     axios.get(`http://localhost:5000/api/users/${id}`)
-          .then((res) => {
-            const userData = res.data
-            setCurrentUser(userData)
-            const sortedTrips = sortPlannedTrips(userData.trips)
-            setUserPlannedTrips(sortedTrips)
-          })
-          .catch(err => console.error(err))
+    const storedUserId = localStorage.getItem('currentUserId');
+    if (storedUserId) {
+      axios.get(`http://localhost:5000/api/users/${storedUserId}`)
+        .then((res) => {
+          const userData = res.data;
+          setCurrentUser(userData);
+          fetchAchievements(userData.id);
+          fetchPlannedTrips(userData.id);
+        })
+        .catch((err) => console.error(err));
     }
-  }, [currentUser])
+  }, [fetchAchievements, fetchPlannedTrips]);
 
   const value = {
-    addAchievement,
     currentUser,
     setCurrentUser,
-    initUser,
-    logout,
-    addTrip, 
-    userPlannedTrips
-  }
+    userAchievements,
+    allAchievements,
+    fetchAchievements,
+    userPlannedTrips,
+    setUserPlannedTrips,
+  };
 
   return (
     <UserContext.Provider value={value}>
       {children}
     </UserContext.Provider>
-  )
-}
+  );
+};
+
 export { UserContext, UserProvider };

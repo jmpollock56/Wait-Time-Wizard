@@ -2,7 +2,7 @@ import express from 'express';
 import cors from 'cors';
 import { disneyResorts } from './parkIds.js';
 import { achievements } from './achievements.js';
-import { getAchievements, verifyUser, getUser, removeTrip, insertTrip } from './database/sql_connection.js';
+import { getAchievements, getUserAchievements, verifyUser, createUser, getUser, removeTrip, insertTrip, getTrip, editTrip } from './database/sql_connection.js';
 
 const port = 5000;
 const app = express();
@@ -124,10 +124,33 @@ app.get('/api/collection/achievements', async (req, res) => {
     res.send(achievements);
 })
 
+app.get('/api/user/achievements/:userId', async (req, res) => {
+    const { userId } = req.params
+    const currentUserAchievements = await getUserAchievements(userId)
+    console.log(currentUserAchievements)
+    res.send(currentUserAchievements)
+})
+
 app.get('/api/users/:userId', async (req, res) => {
     const { userId } = req.params
     const currentUser = await getUser(userId)
     res.send(currentUser)
+})
+
+
+app.post('/api/user/create', async (req, res) => {
+    const newUser = req.body
+    
+
+    const userCreatedMessage = await createUser(newUser)
+    const { message, wasCreated } = userCreatedMessage
+
+    if(wasCreated){
+        res.status(201).send({ message: message })
+    } else {
+        res.status(401).send({ message: message })
+    }
+
 })
 
 app.post('/api/login', async (req, res) => {
@@ -161,6 +184,13 @@ app.post('/api/trips/add', async (req, res) => {
     
 })
 
+app.patch('/api/trip/edit', async (req, res) => {
+    const {trip} = req.body
+    
+    const isEdited = await editTrip(trip)
+    
+})
+
 app.listen(port, async () => {
     console.log('Server is listenting on', port);
-});
+})

@@ -29,7 +29,7 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
       <div className="card-body d-flex flex-column justify-content-between">
         <div>
           <h5 className="card-title">{trip.resort}</h5>
-          <p className="card-text">{`${daysAway} day(s) away`}</p>
+          <p className="card-text">{(daysAway === 0) ? 'Starting Today!' : `${daysAway} day(s) away`}</p>
         </div>
           
         <div>

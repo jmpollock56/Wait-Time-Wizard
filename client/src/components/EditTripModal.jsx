@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react"
+import axios from "axios";
+import { UserContext } from "../context/UserContext";
 
-export default function EditTripModal({ chosenTrip, editExistingTrip }) {
-  const [chosenEditTrip, setChosenEditTrip] = useState({});
+export default function EditTripModal({ chosenTrip }) {
+  const [chosenEditTrip, setChosenEditTrip] = useState((chosenTrip) ? chosenTrip : {});
   const [chosenParkDays, setChosenParkDays] = useState([]);
   const [newSelectedResort, setNewSelectedResort] = useState("");
   const [chosenStart, setChosenStart] = useState("");
@@ -10,32 +12,49 @@ export default function EditTripModal({ chosenTrip, editExistingTrip }) {
   const [allResorts, setAllResorts] = useState([]);
   const [currentParks, setCurrentParks] = useState([]);
   const [chosenDifferenceInDays, setChosenDifferenceInDays] = useState(0);
+  const { editExistingTrip } = useContext(UserContext)
 
+  
+  useEffect(() => {
+    setChosenEditTrip(chosenTrip)
+    setNewSelectedResort(chosenTrip.resort)
+    setChosenStart(chosenTrip.start_date)
+    setChosenEnd(chosenTrip.end_date)
+    setChosenParkDays(chosenTrip.parkDays)
+    console.log(currentParks)
+  }, [chosenTrip])
   
   useEffect(() => {
     const fetchDisneyData = async () => {
       try {
-        const response = await fetch("http://localhost:5000/api/parks/plan");
-        if (response.ok) {
-          const data = await response.json();
+        const responseParks = await fetch("http://localhost:5000/api/parks/plan");
+        if (responseParks.ok) {
+          const data = await responseParks.json();
           setAllResorts(data);
         }
       } catch (error) {
         console.error(error);
       }
     };
+    
     fetchDisneyData() 
-  }, []);
+    
+  }, [])
 
-  useEffect(() => {
-    if (chosenTrip && chosenTrip.dates) {
-      setChosenEditTrip(chosenTrip);
-      setNewSelectedResort(chosenTrip.resort || "");
-      setChosenStart(chosenTrip.start_date || "");
-      setChosenEnd(chosenTrip.end_date || "");
-      setChosenParkDays(chosenTrip.tripDays || []);
-    }
-  }, [chosenTrip]);
+
+  /** 
+   * ------------------Leaving off on 7/24/24-----------------------
+   * You were trying to GET the selected Trip that the user wants to 
+   * edit to the front end. At this point when the Edit button is
+   * clicked in the TripDisplay it will call the backend once each,
+   * but if you close the modal and reopen it the backend will not be 
+   * be called again. The user is able to create and delete trips and 
+   * it gets sent to the database and is rerendered on the UI. The 
+   * trip_parks table in the database is not updating whenever a trip 
+   * is deleted.
+   */
+
+  
     
   useEffect(() => {
     const getParks = () => {
@@ -216,6 +235,7 @@ export default function EditTripModal({ chosenTrip, editExistingTrip }) {
                 type="button"
                 className="btn btn-secondary"
                 data-bs-dismiss="modal"
+                onClick={() => setChosenEditTrip(null)}
               >
                 Close
               </button>

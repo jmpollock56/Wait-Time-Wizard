@@ -30,17 +30,21 @@ export async function getAchievements(){
   
 }
 
+export async function getUserAchievements(id){
+  const [userAchievements] = await pool.query('SELECT achievement_id FROM user_achievements WHERE user_id = ?',[id])
+  return userAchievements
+
+}
+
 export async function verifyUser(username, password){
   const [users] = await pool.query('SELECT * FROM users')
 
   for(let i = 0; i < users.length; i++){
-    
     if(username === users[i].email && password === users[i].password){
       return {isUser: true, id: users[i].id}
-    } else {
-      return {isUser: false}
-    }
+    } 
   }
+  return {isUser: false}
 }
 
 async function setupUserTrips(trips){
@@ -94,6 +98,57 @@ export async function insertTrip(trip) {
   } else {
     return false
   }
+}
+
+export async function editTrip(trip){
+  const { id, resort, dates, tripDays } = trip
+  try {
+    const [res] = await pool.query('UPDATE trips SET resort = ?, start_date = ?, end_date = ? WHERE id = ?',[resort, dates.start, dates.end, id])
+
+    if(tripDays.length > 0){
+      for(let i = 0; i < tripDays.length; i++){
+        const day = tripDays[i]
+        console.log(day.id)
+        await pool.query('UPDATE trip_parks SET park_id = ? WHERE trip_id = ? AND trip_day = ?',[day.id, id, i])
+      }
+    }
+   
+    
+  } catch (error) {
+    console.log(error)
+  }
+  
+}
+
+export async function getTrip(id){
+  console.log(id)
+}
+
+export async function createUser(newUser){
+  const { id, username, email, password } = newUser
+
+  const [similarRes] = await pool.query('SELECT * FROM users WHERE email = ? OR username = ?', [email, username])
+
+  if(similarRes.length === 0) {
+    const [res] = await pool.query('INSERT INTO users (id, username, email, password) VALUES (?,?,?,?)', [id, username, email, password])
+
+    if(res.affectedRows === 1){
+      return { message: 'User successfully created', wasCreated: true } 
+    } else {
+      return { message: 'There was an issue with account creation', wasCreated: false }
+    }
+  } else {
+
+    for(let i = 0; i < similarRes.length; i++){
+      if(similarRes[i].email === email){
+        return { message: 'There is already an email associated with another account', wasCreated: false }
+      } else if(similarRes[i].username === username){
+        return { message: 'There is already a username associated with another account', wasCreated: false }
+      }
+    }
+    
+  }
+  
 }
 
 

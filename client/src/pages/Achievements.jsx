@@ -1,40 +1,19 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import { UserContext } from "../context/UserContext";
 import Header from "../components/Header";
 import AchievementPanel from "../components/AchievementPanel";
 import "../style/Achievements.css";
 
 export default function Achievements() {
-  const { currentUser } = useContext(UserContext)
-  const [allAchievements, setAllAchievements] = useState([])
+  const { currentUser, allAchievements, userAchievements } = useContext(UserContext);
 
-  
-
-  useEffect(() => {
-    async function getAchievements() {
-      try {
-        const response = await fetch(
-          "http://localhost:5000/api/collection/achievements"
-        );
-        const data = await response.json();
-        setAllAchievements(data);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getAchievements();
-  }, []);
-
-  function addAchievement(){
-    console.log('add')
+  function addAchievement() {
+    console.log('add');
   }
 
-  // function checkStatus(achievement) {
-  //   if(completedAchievements) {
-  //     return completedAchievements.some((completed) => completed === achievement.id)
-  //   }
-    
-  // }
+  function checkStatus(achievement) {
+    return userAchievements.some((completed) => completed.achievement_id === achievement.id);
+  }
 
   return (
     <>
@@ -46,16 +25,14 @@ export default function Achievements() {
         </div>
 
         <div className="all-achievements">
-          {allAchievements.map((achievement, i) => {
-            return (
-              <AchievementPanel
-                achievement={achievement}
-                addAchievement={addAchievement}
-                
-                key={i}
-              />
-            );
-          })}
+          {allAchievements.map((achievement, i) => (
+            <AchievementPanel
+              achievement={achievement}
+              addAchievement={addAchievement}
+              isChecked={checkStatus(achievement)}
+              key={i}
+            />
+          ))}
         </div>
       </div>
     </>
