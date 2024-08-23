@@ -15,13 +15,15 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
   function createTrip() {
     // Trip Id generated
     const randomId = Math.floor(Math.random() * 900000) + 1000000;
+    
 
     if(selectedResort && startDate && endDate && parkDays.length === differenceInDays){
       const newTrip = {
-        id: randomId,
+        trip_id: randomId,
         resort: selectedResort,
         dates: { start: startDate, end: endDate },
         tripDays: parkDays,
+        user_id: localStorage.getItem('currentUserId')
       }
       console.log(newTrip)
       setCreatedTrip(newTrip)

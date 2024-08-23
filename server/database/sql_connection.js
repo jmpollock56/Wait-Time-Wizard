@@ -82,14 +82,14 @@ export async function removeTrip(tripId){
 }
 
 export async function insertTrip(trip) {
-  const {trip_id, resort, start_date, end_date, tripDays, user_id} = trip
+  const {trip_id, resort, dates, tripDays, user_id} = trip
   const [resTrip] = await pool.query('INSERT INTO wtw.trips (id, resort, start_date, end_date, user_id) VALUES (?,?,?,?,?)',
-    [trip_id, resort, start_date, end_date, user_id]
+    [trip_id, resort, dates.start, dates.end, user_id]
   )
   
   
   for(let i = 0; i < tripDays.length; i++){
-    const {id, name} = tripDays[i]
+    const {id} = tripDays[i]
     await pool.query('INSERT INTO trip_parks VALUES (?,?,?)',[trip_id, id, i])
   }
 

@@ -127,7 +127,6 @@ app.get('/api/collection/achievements', async (req, res) => {
 app.get('/api/user/achievements/:userId', async (req, res) => {
     const { userId } = req.params
     const currentUserAchievements = await getUserAchievements(userId)
-    console.log(currentUserAchievements)
     res.send(currentUserAchievements)
 })
 
@@ -173,7 +172,8 @@ app.delete('/api/trip/delete/:tripId', async (req, res) => {
 })
 
 app.post('/api/trips/add', async (req, res) => {
-    const trip = req.body
+    const {trip} = req.body
+    console.log(trip)
     const response = await insertTrip(trip)
 
     if(response){

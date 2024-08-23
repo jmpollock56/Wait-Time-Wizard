@@ -4,11 +4,12 @@ import { UserContext } from "../context/UserContext";
 
 
 export default function Header() {
-  const { currentUser, logout } = useContext(UserContext);
+  const { currentUser, setCurrentUser} = useContext(UserContext);
   const navigateTo = useNavigate()
 
   function userLogOut(){
-    logout()
+    localStorage.clear()
+    setCurrentUser({})
     navigateTo('/')
   }
 

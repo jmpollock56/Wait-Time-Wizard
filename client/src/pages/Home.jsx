@@ -6,14 +6,16 @@ import AddTripModal from "../components/AddTripModal.jsx";
 import EditTripModal from "../components/EditTripModal.jsx";
 import RecentAchievementBadge from '../components/RecentAchievementBadge.jsx';
 import { UserContext } from "../context/UserContext.jsx";
+import { useNavigate } from "react-router-dom";
 import "../style/Home.css";
 
 export default function Home() {
   
   const [deletingTrip, setDeletingTrip] = useState({});
   const [editedTrip, setEditedTrip] = useState({});
-  const { addTrip, currentUser, userPlannedTrips } = useContext(UserContext);
+  const { addTrip, currentUser, setCurrentUser, userPlannedTrips, setUserPlannedTrips } = useContext(UserContext);
   const [recentAchievements, setRecentAchievements] = useState([]);
+  const navigateTo = useNavigate()
   
   useEffect(() => {
     if (currentUser) {
@@ -32,8 +34,14 @@ export default function Home() {
   }
 
   function handleDelete(trip) {
-    axios.delete(`http://localhost:5000/api/trip/delete/${trip.id}`)
+    try {
+      axios.delete(`http://localhost:5000/api/trip/delete/${trip.id}`)
           .then(res => console.log(res))
+      const newPlannedTrips = userPlannedTrips.filter(removedTrip => trip.id !== removedTrip.id)
+      setUserPlannedTrips(newPlannedTrips)
+    } catch (error) {
+      console.log(error)
+    }  
   }
 
   function handleNewPlannedTrips(newTrip) {
