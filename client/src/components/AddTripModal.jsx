@@ -25,7 +25,6 @@ export default function AddTripModal({ handleNewPlannedTrips }) {
         tripDays: parkDays,
         user_id: localStorage.getItem('currentUserId')
       }
-      console.log(newTrip)
       setCreatedTrip(newTrip)
       handleNewPlannedTrips(newTrip)
       handleAddTripModalClose()

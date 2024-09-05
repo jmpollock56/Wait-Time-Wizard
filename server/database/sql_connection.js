@@ -32,6 +32,8 @@ export async function getAchievements(){
 
 export async function getUserAchievements(id){
   const [userAchievements] = await pool.query('SELECT achievement_id FROM user_achievements WHERE user_id = ?',[id])
+
+  
   return userAchievements
 
 }

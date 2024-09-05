@@ -33,7 +33,12 @@ const UserProvider = ({ children }) => {
         .catch((err) => {
           console.error(err);
         });
-        setUserPlannedTrips(prev => [...prev, newTrip])
+
+        setUserPlannedTrips((prev) => {
+          const allTrips = [...prev, newTrip]
+          const sortedAllTrips = sortPlannedTrips(allTrips)
+          return sortedAllTrips
+        })
     }
   }
 
@@ -49,6 +54,7 @@ const UserProvider = ({ children }) => {
     } catch (error) {
       console.error("Error fetching achievements:", error);
     }
+    console.log(userAchievements)
   }, []);
 
  const fetchPlannedTrips = useCallback(async (userId) => {
@@ -64,14 +70,13 @@ const UserProvider = ({ children }) => {
 
   function sortPlannedTrips(trips) {
     return trips.sort(
-      (a, b) => new Date(a.start_date) - new Date(b.start_date)
+      (a, b) => new Date(a.start_date || a.dates.start) - new Date(b.start_date || b.dates.start)
     );
   }
 
   useEffect(() => {
-    console.log("useEffect");
     const storedUserId = localStorage.getItem("currentUserId");
-    console.log(storedUserId);
+
     if (storedUserId) {
       axios
         .get(`http://localhost:5000/api/users/${storedUserId}`)
@@ -98,6 +103,7 @@ const UserProvider = ({ children }) => {
     allAchievements,
     fetchAchievements,
     userPlannedTrips,
+    sortPlannedTrips,
     setUserPlannedTrips,
     initUser,
     addTrip,

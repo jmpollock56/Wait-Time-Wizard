@@ -9,12 +9,11 @@ export default function Header() {
 
   function userLogOut(){
     localStorage.clear()
-    setCurrentUser({})
     navigateTo('/')
   }
 
   return (
-    <nav className="navbar navbar-expand-md bg-body-tertiary sticky-top navbar-back px-3 mb-3" >
+    <nav className="navbar navbar-expand-md sticky-top navbar-back px-3 mb-3" style={{backgroundColor: '#e5f1ff'}}>
       <div className="container-fluid">
         <Link to="/home" className="d-flex align-items-center navbar-brand">
           <img src="/hat.png" alt="logo" width={40} height={40} />
@@ -69,7 +68,7 @@ export default function Header() {
             />
             </div>
 
-            <ul className="dropdown-menu dropdown-menu-end me-1 mt-3" style={{cursor: "pointer"}}>
+            <ul className="dropdown-menu dropdown-menu-end border-none me-1 mt-3" style={{cursor: "pointer", backgroundColor: '#e5f1ff'}}>
               <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">View Profile</a></li>
               <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">Settings</a></li>
               <li className="dropdown-item"><a href="#" onClick={userLogOut} className="text-decoration-none">Log out</a></li>

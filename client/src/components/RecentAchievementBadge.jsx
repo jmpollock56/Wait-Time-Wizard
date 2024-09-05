@@ -8,10 +8,9 @@ export default function RecentAchievementBadge({ achievement }){
       style={{width: '80px', height: '80px', fontSize: '.8rem', cursor: 'pointer'}}
     >
       <GoTrophy 
-        
         style={{width: '100%', height: '100%'}}
       />
-
+      
       
     </div>
   )

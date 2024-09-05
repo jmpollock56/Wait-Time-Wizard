@@ -6,6 +6,8 @@ export default function ParkTable({ park }) {
   const [name, setName] = useState(park.name);
   const [textColor, setTextColor] = useState("green");
 
+ 
+
   useEffect(() => {
     const liveRides = park.liveRides;
 
@@ -81,6 +83,7 @@ export default function ParkTable({ park }) {
       console.error(ride, error);
     }
   }
+
 
   return (
     <div className="table-container shadow">

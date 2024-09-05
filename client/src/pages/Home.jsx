@@ -13,15 +13,14 @@ export default function Home() {
   
   const [deletingTrip, setDeletingTrip] = useState({});
   const [editedTrip, setEditedTrip] = useState({});
-  const { addTrip, currentUser, setCurrentUser, userPlannedTrips, setUserPlannedTrips } = useContext(UserContext);
+  const { addTrip, currentUser, setCurrentUser, userPlannedTrips, setUserPlannedTrips, sortPlannedTrips, userAchievements } = useContext(UserContext);
   const [recentAchievements, setRecentAchievements] = useState([]);
   const navigateTo = useNavigate()
   
   useEffect(() => {
     if (currentUser) {
       function updateRecentAchievements() {
-        const completedAchievements = currentUser.completeAchievements || [];
-        const recent = completedAchievements.slice(-5);
+        const recent = userAchievements.slice(-5);
         recent.sort((a, b) => new Date(b.date) - new Date(a.date));
         setRecentAchievements(recent);
       }
@@ -49,14 +48,12 @@ export default function Home() {
   }
 
   if (!currentUser) {
-
     return  <div className="d-flex flex-column justify-content-center align-items-center h-100 gap-4">
               <div className="spinner-border text-primary" style={{width: '200px', height: '200px'}} role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
               <h4>Loading Good Times</h4>
             </div>
-    
   }
 
   return (
