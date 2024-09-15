@@ -93,10 +93,10 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  function addAchievement() {
+  function addAchievement(newAchievement) {
     console.log('add')
 
-    
+
   }
 
   const value = {

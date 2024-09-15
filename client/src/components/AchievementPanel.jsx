@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import SubAchievement from "./SubAchievement";
 import { UserContext } from "../context/UserContext";
 
-export default function AchievementPanel({ achievement, addAchievement, isChecked}) {
+export default function AchievementPanel({ achievement, isChecked}) {
   const baseAchievementClass = "d-flex flex-column border border-primary p-3 rounded bg-primary-subtle"
   const completedAchievementClass = "d-flex flex-column border border-primary p-3 rounded bg-primary-subtle bg-success-subtle border-success"
   const [isCompleted, setIsCompleted] = useState(isChecked)
