@@ -117,8 +117,8 @@ export default function Home() {
             <div className="recent-collections-header">
               <div className="home-title">Recent Achievements</div>
               <div className="d-flex gap-2 flex-wrap">
-                {recentAchievements.length !== 0 ? (
-                  recentAchievements.map((cA, i) => (
+                {userAchievements.length !== 0 ? (
+                  userAchievements.map((cA, i) => (
                     <RecentAchievementBadge key={i} achievement={cA} />
                   ))
                 ) : (

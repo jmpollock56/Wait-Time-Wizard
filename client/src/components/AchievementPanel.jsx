@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import SubAchievement from "./SubAchievement";
+import { UserContext } from "../context/UserContext";
 
 export default function AchievementPanel({ achievement, addAchievement, isChecked}) {
   const baseAchievementClass = "d-flex flex-column border border-primary p-3 rounded bg-primary-subtle"
@@ -8,6 +9,7 @@ export default function AchievementPanel({ achievement, addAchievement, isChecke
   const [currentSubAchievements, setCurrentSubAchievements] = useState([])
   const [achievementClass, setAchievementClass] = useState((isChecked) ? completedAchievementClass : baseAchievementClass)
   const [currentAchievement, setCurrentAchievement] = useState(achievement)
+  const { addAchievement } = useContext(UserContext)
  
   
   function checkSubAchievement(park, e){
@@ -45,7 +47,6 @@ export default function AchievementPanel({ achievement, addAchievement, isChecke
     })
   }
   
-
   function checkIfAchievmentChecked(e){
       const newAchievement = JSON.parse(e.target.getAttribute('data-achievement'))
       addAchievement(newAchievement)
@@ -76,8 +77,6 @@ export default function AchievementPanel({ achievement, addAchievement, isChecke
       setAchievementClass(completedAchievementClass)
     }
   },[currentSubAchievements])
-
-
 
   function checkSubStatus(park){
     

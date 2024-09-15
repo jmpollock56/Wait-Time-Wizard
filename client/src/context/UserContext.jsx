@@ -8,6 +8,27 @@ const UserProvider = ({ children }) => {
   const [userPlannedTrips, setUserPlannedTrips] = useState([]);
   const [userAchievements, setUserAchievements] = useState([]);
   const [allAchievements, setAllAchievements] = useState([]);
+  const [loadingAchievements, setLoadingAchievements] = useState(true)
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem("currentUserId");
+
+    if (storedUserId) {
+      axios
+        .get(`http://localhost:5000/api/users/${storedUserId}`)
+        .then((res) => {
+          const userData = res.data;
+          setCurrentUser(userData);
+          setUserPlannedTrips(userData.trips)
+          console.log(userData)
+          fetchUserAchievements(storedUserId)
+        })
+        .catch((err) => console.error(err));
+    }
+  }, []);
+
+  
+  
 
   function initUser(user) {
     setCurrentUser(user);
@@ -42,67 +63,50 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  const fetchAchievements = useCallback(async (userId) => {
-    try {
-      console.log("fetchAchievements");
-      const [allAchievementsRes, userAchievementsRes] = await Promise.all([
-        axios.get("http://localhost:5000/api/collection/achievements"),
-        axios.get(`http://localhost:5000/api/user/achievements/${userId}`),
-      ]);
-      setAllAchievements(allAchievementsRes.data);
-      setUserAchievements(userAchievementsRes.data);
-    } catch (error) {
-      console.error("Error fetching achievements:", error);
-    }
-    console.log(userAchievements)
-  }, []);
+  // function checkIfTripIsInPast(trips){
+  //   const now = new Date()
+  //   return trips.filter(trip => trip.start_date )
+  // }
 
- const fetchPlannedTrips = useCallback(async (userId) => {
-   try {
-     console.log('fetchPlannedTrips')
-     const response = await axios.get(`http://localhost:5000/api/users/${userId}`);
-     const sortedTrips = sortPlannedTrips(response.data.trips);
-     setUserPlannedTrips(sortedTrips);
-   } catch (error) {
-     console.error('Error fetching planned trips:', error);
-   }
- }, []);
-
-  function sortPlannedTrips(trips) {
+  function sortPlannedTrips(trips) {  
     return trips.sort(
       (a, b) => new Date(a.start_date || a.dates.start) - new Date(b.start_date || b.dates.start)
     );
   }
 
-  useEffect(() => {
-    const storedUserId = localStorage.getItem("currentUserId");
-
-    if (storedUserId) {
+  function fetchUserAchievements(userId){
+    if(userId){
+      setLoadingAchievements(true)
       axios
-        .get(`http://localhost:5000/api/users/${storedUserId}`)
+        .get(`http://localhost:5000/api/user/achievements/${userId}`)
         .then((res) => {
-          const userData = res.data;
-          setCurrentUser(userData);
-          fetchAchievements(userData.id);
-          fetchPlannedTrips(userData.id);
+          const userAchievementData = res.data
+          console.log(userAchievementData)
+          setUserAchievements(userAchievementData)
+          setLoadingAchievements(false)
         })
-        .catch((err) => console.error(err));
-    }
-  }, [fetchAchievements]);
+        .catch((err) => { 
+          console.log(err) 
+          setLoadingAchievements(false)
+        })
 
-  useEffect(() => {
-    if (currentUser) {
-      fetchPlannedTrips(currentUser.id);
     }
-  }, [currentUser, fetchPlannedTrips]);
+  }
+
+  function addAchievement() {
+    console.log('add')
+
+    
+  }
 
   const value = {
     currentUser,
     setCurrentUser,
     userAchievements,
     allAchievements,
-    fetchAchievements,
     userPlannedTrips,
+    loadingAchievements,
+    addAchievement,
     sortPlannedTrips,
     setUserPlannedTrips,
     initUser,

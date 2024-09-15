@@ -1,18 +1,35 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext";
 import Header from "../components/Header";
 import AchievementPanel from "../components/AchievementPanel";
+import axios from "axios";
 import "../style/Achievements.css";
 
-export default function Achievements() {
-  const { currentUser, allAchievements, userAchievements } = useContext(UserContext);
 
-  function addAchievement() {
-    console.log('add');
-  }
+export default function Achievements() {
+  const [allAchievements, setAllAchievements] = useState([])
+  const { currentUser, userAchievements, loadingAchievements } = useContext(UserContext);
+
+
+  useEffect(() => {
+    const fetchAllAchievements = () => {
+      axios
+        .get(`http://localhost:5000/api/collection/achievements`)
+        .then((res) => {
+          const resData = res.data
+          
+          setAllAchievements(resData)
+        })
+        .catch(err => console.error(err)) 
+    }
+    fetchAllAchievements()
+  },[userAchievements, currentUser])
+
+ 
 
   function checkStatus(achievement) {
-    return userAchievements.some((completed) => completed.achievement_id === achievement.id);
+    if (!userAchievements || userAchievements.length === 0) return false;
+    return userAchievements.some((completed) => completed.id === achievement.id);
   }
 
   return (
@@ -24,16 +41,19 @@ export default function Achievements() {
           <button className="btn btn-primary">Sort by Park</button>
         </div>
 
-        <div className="all-achievements">
+        {(!loadingAchievements) ?
+          <div className="all-achievements">
           {allAchievements.map((achievement, i) => (
             <AchievementPanel
               achievement={achievement}
-              addAchievement={addAchievement}
               isChecked={checkStatus(achievement)}
               key={i}
             />
           ))}
         </div>
+        : "Loading..."}
+
+        
       </div>
     </>
   );

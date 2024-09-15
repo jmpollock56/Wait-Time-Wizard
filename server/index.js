@@ -127,7 +127,12 @@ app.get('/api/collection/achievements', async (req, res) => {
 app.get('/api/user/achievements/:userId', async (req, res) => {
     const { userId } = req.params
     const currentUserAchievements = await getUserAchievements(userId)
+    console.log(currentUserAchievements)
     res.send(currentUserAchievements)
+})
+
+app.post('/api/user/achievements/add', async (req, res) => {
+    const newAchievement = req.body
 })
 
 app.get('/api/users/:userId', async (req, res) => {
@@ -135,7 +140,6 @@ app.get('/api/users/:userId', async (req, res) => {
     const currentUser = await getUser(userId)
     res.send(currentUser)
 })
-
 
 app.post('/api/user/create', async (req, res) => {
     const newUser = req.body
