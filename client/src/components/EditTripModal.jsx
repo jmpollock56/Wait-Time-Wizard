@@ -21,7 +21,6 @@ export default function EditTripModal({ chosenTrip }) {
     setChosenStart(chosenTrip.start_date)
     setChosenEnd(chosenTrip.end_date)
     setChosenParkDays(chosenTrip.parkDays)
-    console.log(currentParks)
   }, [chosenTrip])
   
   useEffect(() => {
@@ -41,21 +40,6 @@ export default function EditTripModal({ chosenTrip }) {
     
   }, [])
 
-
-  /** 
-   * ------------------Leaving off on 7/24/24-----------------------
-   * You were trying to GET the selected Trip that the user wants to 
-   * edit to the front end. At this point when the Edit button is
-   * clicked in the TripDisplay it will call the backend once each,
-   * but if you close the modal and reopen it the backend will not be 
-   * be called again. The user is able to create and delete trips and 
-   * it gets sent to the database and is rerendered on the UI. The 
-   * trip_parks table in the database is not updating whenever a trip 
-   * is deleted.
-   */
-
-  
-    
   useEffect(() => {
     const getParks = () => {
       const selectedResortObject = allResorts.find(

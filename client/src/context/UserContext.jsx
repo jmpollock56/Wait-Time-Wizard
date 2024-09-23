@@ -9,6 +9,7 @@ const UserProvider = ({ children }) => {
   const [userAchievements, setUserAchievements] = useState([]);
   const [allAchievements, setAllAchievements] = useState([]);
   const [loadingAchievements, setLoadingAchievements] = useState(true)
+  const [watchedRides, setWatchedRides] = useState([])
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("currentUserId");
@@ -20,7 +21,7 @@ const UserProvider = ({ children }) => {
           const userData = res.data;
           setCurrentUser(userData);
           setUserPlannedTrips(userData.trips)
-          console.log(userData)
+          setWatchedRides(userData.watchedRides)
           fetchUserAchievements(storedUserId)
         })
         .catch((err) => console.error(err));
@@ -77,11 +78,11 @@ const UserProvider = ({ children }) => {
   function fetchUserAchievements(userId){
     if(userId){
       setLoadingAchievements(true)
+
       axios
         .get(`http://localhost:5000/api/user/achievements/${userId}`)
         .then((res) => {
           const userAchievementData = res.data
-          console.log(userAchievementData)
           setUserAchievements(userAchievementData)
           setLoadingAchievements(false)
         })
@@ -93,12 +94,13 @@ const UserProvider = ({ children }) => {
     }
   }
 
+  console.log(watchedRides)
+
   function addAchievement(newAchievement) {
     console.log('add')
-
-
   }
 
+  console.log(currentUser)
   const value = {
     currentUser,
     setCurrentUser,
@@ -111,6 +113,7 @@ const UserProvider = ({ children }) => {
     setUserPlannedTrips,
     initUser,
     addTrip,
+    watchedRides
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

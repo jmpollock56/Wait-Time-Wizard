@@ -5,6 +5,7 @@ import TripDisplay from "../components/TripDisplay.jsx";
 import AddTripModal from "../components/AddTripModal.jsx";
 import EditTripModal from "../components/EditTripModal.jsx";
 import RecentAchievementBadge from '../components/RecentAchievementBadge.jsx';
+import WatchedRides from "../components/WatchedRides.jsx";
 import { UserContext } from "../context/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
 import "../style/Home.css";
@@ -104,14 +105,6 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="w-100">
-            <div className="recent-collections-header">
-              <div className="home-title">Recent Favorites</div>
-              <div className="p-3">
-                <p>No recent Favorites to show.</p>
-              </div>
-            </div>
-          </div>
 
           <div className="w-100">
             <div className="recent-collections-header">
@@ -129,9 +122,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="right-container w-100">
-          <div className="social-title">Your Social Feed</div>
-          <div className="user-feed"></div>
+        <div className="right-container w-100 mt-3">
+          <WatchedRides />
+          <div>
+            <div className="social-title">Your Social Feed</div>
+            <div className="user-feed"></div>
+          </div>
+          
         </div>
       </div>
     </>

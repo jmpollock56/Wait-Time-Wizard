@@ -11,7 +11,7 @@ export default function RecentAchievementBadge({ achievement }){
         cursor: 'pointer'
       }}
     >
-      <img style={{width: '80%'}} src="/public/wreath.png" alt="badge" />
+      <img style={{width: '80%'}} src="/wreath.png" alt="badge" />
       
       
       <div className="text-center text-bold" style={{fontSize: '60%'}}>{achievement.name}</div>

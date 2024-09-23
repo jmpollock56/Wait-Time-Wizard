@@ -71,7 +71,7 @@ export default function Header() {
             <ul className="dropdown-menu dropdown-menu-end border-none me-1 mt-3" style={{cursor: "pointer", backgroundColor: '#e5f1ff'}}>
               <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">View Profile</a></li>
               <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">Settings</a></li>
-              <li className="dropdown-item"><a href="#" onClick={userLogOut} className="text-decoration-none">Log out</a></li>
+              <li onClick={userLogOut} className="dropdown-item"><a href="#" className="text-decoration-none">Log out</a></li>
             </ul>
           </ul>
           

@@ -13,11 +13,10 @@
 
 .table-container{
   position: relative;
-  height: 400px;
   min-height: 400px;
   max-height: 400px;
   overflow-y: auto;
-  width: 800px;
+  width: 600px;
   min-width: 200px;
   scrollbar-width: thin;
   border: 2px #8db4e4c0 solid;

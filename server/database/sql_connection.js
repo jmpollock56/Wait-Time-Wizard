@@ -61,12 +61,14 @@ async function setupUserTrips(trips){
 export async function getUser(id){
   const [user] = await pool.query('SELECT * FROM users WHERE id = ?', [id])
   const [userTrips] = await pool.query('SELECT * FROM trips WHERE user_id = ?', [id])
+  const [watchedRides] = await pool.query('SELECT * FROM watched_rides WHERE user_id = ?', [id])
   const completeTrips = await setupUserTrips(userTrips)
  
   const completeUser = {
     id: user[0].id,
     username: user[0].username,
-    trips: completeTrips
+    trips: completeTrips,
+    watchedRides: watchedRides
   }
 
   return completeUser
@@ -150,6 +152,8 @@ export async function createUser(newUser){
   }
   
 }
+
+
 
 
 
