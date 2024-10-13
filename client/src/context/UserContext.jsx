@@ -10,6 +10,7 @@ const UserProvider = ({ children }) => {
   const [allAchievements, setAllAchievements] = useState([]);
   const [loadingAchievements, setLoadingAchievements] = useState(true)
   const [watchedRides, setWatchedRides] = useState([])
+  const [favoriteParks, setFavoriteParks] = useState([])
 
   useEffect(() => {
     const storedUserId = localStorage.getItem("currentUserId");
@@ -22,14 +23,12 @@ const UserProvider = ({ children }) => {
           setCurrentUser(userData);
           setUserPlannedTrips(userData.trips)
           setWatchedRides(userData.watchedRides)
+          setFavoriteParks(userData.favoriteParks)
           fetchUserAchievements(storedUserId)
         })
         .catch((err) => console.error(err));
     }
   }, []);
-
-  
-  
 
   function initUser(user) {
     setCurrentUser(user);
@@ -94,8 +93,6 @@ const UserProvider = ({ children }) => {
     }
   }
 
-  console.log(watchedRides)
-
   function addAchievement(newAchievement) {
     console.log('add')
   }
@@ -113,7 +110,10 @@ const UserProvider = ({ children }) => {
     setUserPlannedTrips,
     initUser,
     addTrip,
-    watchedRides
+    watchedRides,
+    setWatchedRides, 
+    favoriteParks, 
+    setFavoriteParks
   };
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;

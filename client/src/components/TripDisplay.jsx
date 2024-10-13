@@ -24,28 +24,28 @@ export default function TripDisplay({ trip, editTrip, deleteTrip }) {
 
   return (
     <div 
-      className="card bg-primary-subtle border-primary shadow" 
+      className="card main-border shadow" 
       style={{ width: '12rem', 
         minWidth: '10rem', 
         cursor: 'pointer', 
         height: "10rem"
       }}>
-      <div className="card-body d-flex flex-column justify-content-between text-white">
+      <div className="card-body d-flex flex-column justify-content-between main-panel">
         <div>
-          <h5 className="card-title fw-bolder">{trip.resort}</h5>
-          <p className="card-text fw-bolder">{(daysAway === 0) ? 'Starting Today!' : `${daysAway} day(s) away`}</p>
+          <div className="card-title fw-bolder main-text">{trip.resort}</div>
+          <p className="card-text fw-bolder main-text">{(daysAway === 0) ? 'Starting Today!' : `${daysAway} day(s) away`}</p>
         </div>
           
         <div>
           <button
-            className="btn btn-primary me-3"
+            className="btn main-btn text-white me-3"
             data-bs-toggle="modal"
             data-bs-target="#editTripModal"
             onClick={() => editTrip(currentTrip)}
           >
             Edit
           </button>
-          <button className="btn btn-light" onClick={() => deleteTrip(currentTrip)}>Cancel</button>
+          <button className="btn option-btn" onClick={() => deleteTrip(currentTrip)}>Cancel</button>
         </div>
        
       </div>

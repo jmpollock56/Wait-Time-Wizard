@@ -13,11 +13,11 @@ export default function Header() {
   }
 
   return (
-    <nav className="navbar navbar-expand-md sticky-top navbar-back px-3 mb-3" style={{backgroundColor: '#e5f1ff'}}>
+    <nav className="navbar navbar-expand-md sticky-top navbar-back px-3 mb-3" style={{backgroundColor: '#A4C8F0'}}>
       <div className="container-fluid">
         <Link to="/home" className="d-flex align-items-center navbar-brand">
           <img src="/hat.png" alt="logo" width={40} height={40} />
-          <div>
+          <div className="text-white">
             <b>Wait Time Wizard</b>
           </div>
         </Link>
@@ -36,17 +36,17 @@ export default function Header() {
         <div className="collapse navbar-collapse" id="navbarNav">
           <ul className="navbar-nav me-auto mb-lg-0">
             <li className="nav-item">
-              <Link to="/home" className="nav-link navbar-text">
+              <Link to="/home" className="nav-link navbar-text text-white">
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/parks" className="nav-link navbar-text">
+              <Link to="/parks" className="nav-link navbar-text text-white">
                 Parks
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/achievements" className="nav-link navbar-text">
+              <Link to="/achievements" className="nav-link navbar-text text-white">
                 Achievements
               </Link>
             </li>
@@ -55,7 +55,7 @@ export default function Header() {
 
           <ul className="nav-item navbar-nav btn-group me-4">
             <div className="nav-item d-flex align-items-center gap-1 dropdown-toggle" role="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
-              <div>{(currentUser) ? currentUser.username : 'loading'}</div>
+              <div className="text-white">{(currentUser) ? currentUser.username : 'loading'}</div>
               <img
               style={{
                 width: "40px",
@@ -69,9 +69,9 @@ export default function Header() {
             </div>
 
             <ul className="dropdown-menu dropdown-menu-end border-none me-1 mt-3" style={{cursor: "pointer", backgroundColor: '#e5f1ff'}}>
-              <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">View Profile</a></li>
-              <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none">Settings</a></li>
-              <li onClick={userLogOut} className="dropdown-item"><a href="#" className="text-decoration-none">Log out</a></li>
+              <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none main-text">View Profile</a></li>
+              <li className="nav-item dropdown-item"><a href="#" className="text-decoration-none main-text">Settings</a></li>
+              <li onClick={userLogOut} className="dropdown-item"><a href="#" className="text-decoration-none main-text">Log out</a></li>
             </ul>
           </ul>
           

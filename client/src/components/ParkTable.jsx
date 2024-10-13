@@ -9,7 +9,7 @@ export default function ParkTable({ park }) {
   const [name, setName] = useState(park.name);
   const [textColor, setTextColor] = useState("green");
   const [isFavorite, setIsFavorite] = useState(false)
-  const { watchedRides } = useContext(UserContext);
+  const { watchedRides, favoriteParks, setFavoriteParks } = useContext(UserContext);
 
   /**
    * Used for ordering the ride wait times from shortest to longest
@@ -97,12 +97,14 @@ export default function ParkTable({ park }) {
 
   function addFavorite(){
     setIsFavorite(prev => !prev)
+    setFavoriteParks(prev => [...prev, {park_id: park.id, name: park.name}])
   }
 
   return (
-    <div className="table-responsive w-100" style={{maxWidth: '1200px'}}>
-      <table className="table table-striped table-hover table-borderless h-100 border shadow">
-        <thead className="z-1" style={{ textAlign: "center" }}>
+    <div className="table-responsive" style={{width: '800px', maxHeight: '500px'}}>
+      <table className="table table-striped table-hover table-borderless h-100 border shadow" 
+              >
+        <thead className="z-1 text-center sticky-top">
           <tr>
             <th
               className="d-flex justify-content-center align-items-center gap-2 bg-primary bg-gradient"

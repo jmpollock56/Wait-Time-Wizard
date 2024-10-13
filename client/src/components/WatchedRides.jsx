@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserContext } from "../context/UserContext.jsx";
+import '../style/WatchedRides.css'
 import axios from "axios";
 
 export default function WatchedRides() {
@@ -29,13 +30,13 @@ export default function WatchedRides() {
   }, [watchedRides]);
 
   return (
-    <div className="border border-primary rounded p-2">
+    <div className="main-border rounded p-2 shadow" style={{width: '80%'}}>
       <div className="fs-4 fw-bold text-center mb-2">Watched Rides</div>
       {displayedRides.length > 0 ? (
         displayedRides.map((ride, i) => (
           <div
             key={i}
-            className="d-flex justify-content-between align-items-center"
+            className="d-flex justify-content-between align-items-center p-2 rounded ride"
           >
             <div className="fs-5 text-bold">{ride.name}</div>
             <div className="text-bold fs-5 border p-2 rounded-5 bg-info text-light">

@@ -3,7 +3,8 @@ import cors from 'cors';
 import axios from "axios";
 import { disneyResorts } from './parkIds.js';
 import { achievements } from './achievements.js';
-import { getAchievements, getUserAchievements, verifyUser, createUser, getUser, removeTrip, insertTrip, getTrip, editTrip } from './database/sql_connection.js';
+import { getAchievements, getUserAchievements, verifyUser, createUser, getUser, 
+    removeTrip, insertTrip, getTrip, editTrip } from './database/sql_connection.js';
 
 const port = 5000;
 const app = express();

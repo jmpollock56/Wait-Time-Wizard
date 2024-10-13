@@ -12,10 +12,9 @@ export default function Resorts({ resorts, id }){
     return <div>Loading</div>
   } 
   
-  console.log(parks)
 
   return (
-    <div className='d-lg-flex flex-column align-items-center p-3 gap-3'>
+    <div className='d-flex flex-wrap justify-content-evenly p-2 gap-3'>
       {parks.map((park, i) => {
         return <ParkTable key={i} park={park}/>
       })}

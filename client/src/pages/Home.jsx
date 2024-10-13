@@ -6,17 +6,22 @@ import AddTripModal from "../components/AddTripModal.jsx";
 import EditTripModal from "../components/EditTripModal.jsx";
 import RecentAchievementBadge from '../components/RecentAchievementBadge.jsx';
 import WatchedRides from "../components/WatchedRides.jsx";
+import Favorites from "../components/Favorites.jsx";
+import Post from "../components/Post.jsx";
+import Map from "../components/Map.jsx";
 import { UserContext } from "../context/UserContext.jsx";
 import { useNavigate } from "react-router-dom";
+import L from 'leaflet';
 import "../style/Home.css";
 
 export default function Home() {
   
   const [deletingTrip, setDeletingTrip] = useState({});
   const [editedTrip, setEditedTrip] = useState({});
-  const { addTrip, currentUser, setCurrentUser, userPlannedTrips, setUserPlannedTrips, sortPlannedTrips, userAchievements } = useContext(UserContext);
+  const { addTrip, currentUser, setCurrentUser, userPlannedTrips, setUserPlannedTrips, sortPlannedTrips, userAchievements, watchedRides } = useContext(UserContext);
   const [recentAchievements, setRecentAchievements] = useState([]);
   const navigateTo = useNavigate()
+  
   
   useEffect(() => {
     if (currentUser) {
@@ -28,6 +33,7 @@ export default function Home() {
       updateRecentAchievements();
     }
   }, [currentUser])
+  
 
   function editTrip(selectedTrip) {
     setEditedTrip(selectedTrip);
@@ -98,9 +104,9 @@ export default function Home() {
 
           <div className="w-100">
             <div className="recent-collections-header">
-              <div className="home-title">Recent Collections</div>
-              <div className="p-3">
-                <p>No recent Collection items to show.</p>
+              <div className="home-title">Favorite Parks</div>
+              <div className="p-2">
+                <Favorites />
               </div>
             </div>
           </div>
@@ -122,15 +128,28 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="right-container w-100 mt-3">
-          <WatchedRides />
-          <div>
-            <div className="social-title">Your Social Feed</div>
-            <div className="user-feed"></div>
+        <div className="right-container w-100 mt-3 d-flex flex-column align-items-center">
+          <div className="w-100">
+            <div className="social-title mb-2">Your Social Feed</div>
+            <div className="w-100">
+
+              <Post content={'I love disney world!'} />
+              <Post content={'Going to Disney world in November!!'} />
+              <Post content={'I hope everyone is safe in the orlando area!'} />
+              <Post content={'I got to dance with mickey today!! <3'} />
+
+              
+            </div>
           </div>
-          
         </div>
+
+        <div className="d-flex flex-column gap-2 w-100 align-items-center">
+          <WatchedRides />
+          <Map currentUser={currentUser} watchedRides={watchedRides}/>
+        </div>
+
+        
       </div>
     </>
-  );
+  );  
 }

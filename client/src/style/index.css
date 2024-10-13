@@ -1,10 +1,45 @@
 html, body{
   margin: 0 auto;
-  background-color: #e5f1ff;
+  background-color: #F2F5FA;
   height: 100vh;
+  
 } 
 
 #root{
   height: 100%;
-  background-color: #e5f1ff;
+  background-color: #F2F5FA;
+}
+
+#map{
+  height: 180px;
+}
+
+.main-btn{
+  background-color: #527BAE;
+}
+
+.main-btn:hover{
+  background-color: #7896B8;
+}
+
+.option-btn {
+  background-color: white;
+  border: 1px #527BAE solid;
+  color: #527BAE;
+}
+
+.main-panel{
+  background-color: #F2F5FA;
+}
+
+.main-text{
+  color: #527BAE;
+}
+
+.sub-text{
+  color: #527BAE;
+}
+
+.main-border{
+  border: 2px solid #527BAE;
 }

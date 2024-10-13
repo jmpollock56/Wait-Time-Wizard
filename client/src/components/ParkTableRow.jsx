@@ -1,10 +1,12 @@
 import React, { useState , useContext} from "react";
+import { UserContext } from "../context/UserContext.jsx";
 import { BsBinoculars } from "react-icons/bs";
 import { BsBinocularsFill } from "react-icons/bs";
 
 
 export default function ParkTableRow({ ride, status, color, parkId, isWatched}) {
   const [watched, setWatched] = useState(isWatched);
+  const { watchedRides, setWatchedRides, currentUser } = useContext(UserContext);
  
   
   function watchRide(){
@@ -23,8 +25,16 @@ export default function ParkTableRow({ ride, status, color, parkId, isWatched}) 
       
     }
     setWatched(prev => !prev)
+    const newWatchedRide = {
+      user_id: currentUser.id,
+      ride_id: ride.id,
+      park_id: parkId
+    }
+    setWatchedRides(prev => [...prev, newWatchedRide])
   }
 
+  console.log(watchedRides)
+  
   return (
     <tr>
       <th

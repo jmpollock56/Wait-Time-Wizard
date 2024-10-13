@@ -62,13 +62,18 @@ export async function getUser(id){
   const [user] = await pool.query('SELECT * FROM users WHERE id = ?', [id])
   const [userTrips] = await pool.query('SELECT * FROM trips WHERE user_id = ?', [id])
   const [watchedRides] = await pool.query('SELECT * FROM watched_rides WHERE user_id = ?', [id])
+  /**
+   * Change the favoriteParks to grab just the name of the park with a join from the db
+   */
+  const [favoriteParks] = await pool.query('SELECT favorite_parks.park_id, parks.name FROM wtw.parks INNER JOIN wtw.favorite_parks ON parks.id = favorite_parks.park_id WHERE user_id = ?', [id])
   const completeTrips = await setupUserTrips(userTrips)
  
   const completeUser = {
     id: user[0].id,
     username: user[0].username,
     trips: completeTrips,
-    watchedRides: watchedRides
+    watchedRides: watchedRides, 
+    favoriteParks: favoriteParks
   }
 
   return completeUser
@@ -151,6 +156,11 @@ export async function createUser(newUser){
     
   }
   
+}
+
+export async function getFavoriteParks(id){
+  const [favoriteParks] = await pool.query('SELECT park_id FROM wtw.favorite_parks WHERE user_id = ?', [id])
+  return favoriteParks
 }
 
 
